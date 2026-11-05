@@ -2,6 +2,7 @@ import {
   clampChroma,
   converter,
   formatHex,
+  modeHsl,
   modeLrgb,
   modeOklab,
   modeOklch,
@@ -14,6 +15,7 @@ import {
 
 // Register only what we use, so the landing page doesn't pay for all of culori.
 useMode(modeRgb);
+useMode(modeHsl);
 useMode(modeLrgb);
 useMode(modeOklab);
 useMode(modeOklch);
@@ -29,6 +31,13 @@ export function normalizeHex(input: string): string | null {
   const digits = match[1];
   const full = digits.length === 3 ? [...digits].map((d) => d + d).join('') : digits;
   return `#${full.toUpperCase()}`;
+}
+
+/** Any CSS colour we can read, as #RRGGBB. Null if unreadable or fully transparent. */
+export function cssColorToHex(input: string): string | null {
+  const color = parse(input.trim());
+  if (!color || color.alpha === 0) return null;
+  return formatHex(color)?.toUpperCase() ?? null;
 }
 
 export interface Lch {

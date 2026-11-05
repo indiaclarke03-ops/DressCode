@@ -6,6 +6,9 @@ import { useConfig } from '@/app/ConfigContext';
 import { Button } from '@/components/ui/Button';
 import { Stepper } from '@/components/ui/Stepper';
 import { PagePlaceholder } from '@/pages/PagePlaceholder';
+import { ChangeSize } from './restyle/ChangeSize';
+import { CurrentProject } from './restyle/CurrentProject';
+import { KeepList } from './restyle/KeepList';
 import { AvoidList } from './shared/AvoidList';
 import { Colour } from './shared/Colour';
 import { ProjectDetails } from './shared/ProjectDetails';
@@ -22,6 +25,9 @@ const STEP_TRANSITION = { duration: 0.2, ease: 'easeOut' } as const;
 /** Steps without an entry here show their phase placeholder. */
 const STEP_BODIES: Record<string, ComponentType<{ onDone: () => void }>> = {
   project: ProjectType,
+  current: CurrentProject,
+  keep: KeepList,
+  size: ChangeSize,
   'this-or-that': ThisOrThat,
   colour: Colour,
   typography: Typography,

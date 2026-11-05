@@ -36,6 +36,8 @@ export interface RestyleConfig {
   keep: string[];
   scope: RestyleScope;
   gradualTarget?: string;
+  /** The brand or logo colour to protect, when that item is kept. */
+  keepColor?: string;
   /** old hex -> token name */
   colorMap: Record<string, string>;
 }

@@ -3,6 +3,7 @@ import type { DesignConfig } from '@/tokens/types';
 import { claudeMdSnippet } from './claudeMdSnippet';
 import { designMd } from './designMd';
 import { kickoff } from './kickoff';
+import { restyleMd } from './restyleMd';
 import { skillMd, skillPath } from './skillMd';
 import { tailwind } from './tailwind';
 import { tokensCss } from './tokensCss';
@@ -35,6 +36,8 @@ export function generateFiles(config: DesignConfig, tokens: DesignTokens): Gener
     file('claude', 'CLAUDE.md snippet', 'CLAUDE-snippet.md', 'markdown', claudeMdSnippet(config, tokens)),
     file('tokens', 'tokens.css', 'tokens.css', 'css', tokensCss(config, tokens)),
     file('tailwind', 'tailwind', 'tailwind-theme.txt', 'css', tailwind(config, tokens)),
-    file('kickoff', 'KICKOFF prompt', 'KICKOFF.md', 'markdown', kickoff(config, tokens)),
+    config.mode === 'restyle'
+      ? file('restyle', 'RESTYLE.md', 'RESTYLE.md', 'markdown', restyleMd(config, tokens))
+      : file('kickoff', 'KICKOFF prompt', 'KICKOFF.md', 'markdown', kickoff(config, tokens)),
   ];
 }

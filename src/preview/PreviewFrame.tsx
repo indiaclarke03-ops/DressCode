@@ -11,6 +11,7 @@ import {
 } from 'react';
 import { useConfig } from '@/app/ConfigContext';
 import { usePairingFonts } from '@/lib/fonts';
+import { currentCssVars } from '@/restyle/currentStyle';
 import { toCssVars } from '@/tokens/cssVars';
 import { SCENE_FOR_PROJECT } from '@/tokens/defaults';
 import { SCENES } from './scenes';
@@ -67,6 +68,7 @@ export function PreviewFrame({ defaultDevice = 'desktop' }: { defaultDevice?: Pr
   const { config, tokens } = useConfig();
   const [device, setDevice] = useState(defaultDevice);
   const [replay, setReplay] = useState(0);
+  const [showCurrent, setShowCurrent] = useState(false);
   usePairingFonts([config.fontPairingId]);
 
   const width = DEVICE_WIDTH[device];
@@ -77,10 +79,12 @@ export function PreviewFrame({ defaultDevice = 'desktop' }: { defaultDevice?: Pr
   useRevealMotion(page, tokens.motion, replay);
 
   // Variables update in place, so a change never re-mounts the scene.
-  const style = useMemo(
-    () => ({ ...toCssVars(tokens), colorScheme: tokens.theme }) as CSSProperties,
-    [tokens],
-  );
+  const canCompare = config.mode === 'restyle' && Boolean(config.restyle?.extracted);
+  const style = useMemo(() => {
+    const vars = toCssVars(tokens);
+    const shown = canCompare && showCurrent && config.restyle ? currentCssVars(vars, config.restyle) : vars;
+    return { ...shown, colorScheme: tokens.theme } as CSSProperties;
+  }, [canCompare, config.restyle, showCurrent, tokens]);
   const Scene = SCENES[SCENE_FOR_PROJECT[config.projectType]];
 
   return (
@@ -88,6 +92,21 @@ export function PreviewFrame({ defaultDevice = 'desktop' }: { defaultDevice?: Pr
       <div className="flex items-center justify-between">
         <p className="m-0 text-sm font-medium text-ink">Live preview</p>
         <div className="flex items-center gap-1">
+          {canCompare ? (
+            <div className="mr-2 flex rounded-button border border-line p-0.5 text-sm">
+              {[false, true].map((current) => (
+                <button
+                  key={String(current)}
+                  type="button"
+                  aria-pressed={showCurrent === current}
+                  onClick={() => setShowCurrent(current)}
+                  className="min-h-8 rounded-button px-2.5 text-muted aria-pressed:bg-surface aria-pressed:text-ink"
+                >
+                  {current ? 'Current' : 'New'}
+                </button>
+              ))}
+            </div>
+          ) : null}
           <ToolButton label="Replay motion" onClick={() => setReplay((count) => count + 1)}>
             <Play aria-hidden size={16} />
           </ToolButton>

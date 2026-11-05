@@ -5,6 +5,7 @@ import { TextInput } from '@/components/ui/TextInput';
 import { normalizeHex } from '@/tokens/color';
 import type { DesignConfig } from '@/tokens/types';
 import { ContrastChecklist } from './ContrastChecklist';
+import { CurrentPalette } from './CurrentVsNew';
 import { PaletteStrip } from './PaletteStrip';
 import { SwatchPicker } from './SwatchPicker';
 
@@ -70,6 +71,7 @@ export function Colour() {
       </div>
 
       <div className="flex flex-col gap-6">
+        <CurrentPalette />
         <PaletteStrip label="Your palette" colours={Object.values(tokens.colors)} />
         {tokens.includeDataPalette ? (
           <>

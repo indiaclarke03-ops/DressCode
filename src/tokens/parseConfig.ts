@@ -73,10 +73,11 @@ function parseExtracted(value: unknown): ExtractedStyles | null {
 
 function parseRestyle(value: unknown): RestyleConfig | null {
   if (!isRecord(value)) return null;
-  const { stylingSystem, extracted, keep, scope, gradualTarget, colorMap } = value;
+  const { stylingSystem, extracted, keep, scope, gradualTarget, keepColor, colorMap } = value;
   if (!isText(stylingSystem) || !isOneOf(RESTYLE_SCOPES, scope)) return null;
   if (!isTextList(keep) || !keep.includes(LOCKED_KEEP_ITEM)) return null;
-  if (!isOptionalText(gradualTarget)) return null;
+  if (!isOptionalText(gradualTarget) || !isOptionalText(keepColor)) return null;
+  if (keepColor !== undefined && normalizeHex(keepColor) === null) return null;
 
   const parsedMap = parseColorMap(colorMap);
   if (!parsedMap) return null;
@@ -90,6 +91,7 @@ function parseRestyle(value: unknown): RestyleConfig | null {
     colorMap: parsedMap,
     ...(parsedExtracted ? { extracted: parsedExtracted } : {}),
     ...(gradualTarget !== undefined ? { gradualTarget } : {}),
+    ...(keepColor !== undefined ? { keepColor } : {}),
   };
 }
 

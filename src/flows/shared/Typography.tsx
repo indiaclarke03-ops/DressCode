@@ -4,6 +4,7 @@ import { usePairingFonts } from '@/lib/fonts';
 import { TYPE_RATIO, typeSizes } from '@/tokens/deriveTokens';
 import { FONT_PAIRINGS, type FontPairing } from '@/tokens/fontPairings';
 import type { DesignConfig } from '@/tokens/types';
+import { CurrentFont } from './CurrentVsNew';
 
 const SECTION_HEADING = 'mt-0 mb-3 text-sm font-medium text-ink';
 const stack = (role: FontPairing['heading']) => `'${role.family}', ${role.fallback}`;
@@ -46,6 +47,7 @@ export function Typography() {
 
   return (
     <div className="flex flex-col gap-10">
+      <CurrentFont />
       <section>
         <h2 className={SECTION_HEADING}>Heading style</h2>
         <ChoiceGroup

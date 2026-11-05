@@ -9,6 +9,7 @@ import { generateFiles } from '@/generators';
 import { styleSlug } from '@/generators/shared';
 import { shareUrl } from '@/lib/urlState';
 import { useCopy } from '@/lib/useCopy';
+import { ColorMapEditor } from '../restyle/ColorMapEditor';
 import { SaveStyle } from './SaveStyle';
 
 const PreviewFrame = lazy(() =>
@@ -106,6 +107,8 @@ export function Review() {
           <PreviewFrame />
         </Suspense>
       </section>
+
+      {config.mode === 'restyle' ? <ColorMapEditor /> : null}
 
       <section>
         <h2 className="mt-0 mb-2 font-display text-heading font-normal text-ink">Your files</h2>

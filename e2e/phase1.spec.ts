@@ -11,6 +11,8 @@ const ROUTES = [
   { name: 'step-avoid', path: './#/fresh/avoid' },
   { name: 'restyle-step', path: './#/restyle/current' },
   { name: 'step-review', path: './#/fresh/review' },
+  { name: 'restyle-keep', path: './#/restyle/keep' },
+  { name: 'restyle-size', path: './#/restyle/size' },
   { name: 'styles', path: './#/styles' },
   { name: 'tweaks', path: './#/tweaks' },
   { name: 'kit', path: './#/kit' },

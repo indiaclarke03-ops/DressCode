@@ -9,6 +9,7 @@ import { generateFiles } from '../index';
 import { kickoff } from '../kickoff';
 import { ANSWER_RULES } from '../projectRules';
 import { describeColour, styleSlug, styleTitle } from '../shared';
+import { restyleMd } from '../restyleMd';
 import { skillMd, skillPath } from '../skillMd';
 import { MEDIUMS, stylePrompt } from '../stylePrompt';
 import { tailwind } from '../tailwind';
@@ -213,5 +214,69 @@ describe('style prompts', () => {
     expect(stylePrompt(quietLedger, tokens, 'other', 'a trade show banner')).toContain(
       "We're making a trade show banner.",
     );
+  });
+});
+
+describe('RESTYLE.md', () => {
+  const restyled: DesignConfig = {
+    ...createDefaultConfig('restyle', 'dashboard'),
+    name: 'Quiet Ledger',
+    restyle: {
+      stylingSystem: 'tailwind',
+      keep: ['functionality', 'layout', 'components', 'brand-colour'],
+      keepColor: '#1F5C45',
+      scope: 'retheme',
+      colorMap: { '#6C5CE7': 'accent', '#F1F1F1': 'surface', '#1F5C45': 'accent' },
+    },
+  };
+  const md = restyleMd(restyled, deriveTokens(restyled));
+
+  it('follows the template', () => {
+    expect(md).toContain('# Restyle: apply the "Quiet Ledger" design to this project');
+    expect(md).toContain('change how this project LOOKS, not what it DOES');
+    expect(md).toContain('Keep: layout and page structure, the existing component library');
+    expect(md).toContain('logo colour #1F5C45');
+    expect(md).toContain('Scope: Re-theme only');
+    expect(md).toContain('your Tailwind config and class names');
+    expect(md).toContain('as a Tailwind theme');
+  });
+
+  it('writes the old to new map and leaves the kept colour alone', () => {
+    expect(md).toContain('- #6C5CE7 → accent');
+    expect(md).toContain('- #F1F1F1 → surface');
+    expect(md).not.toContain('#1F5C45 → accent');
+  });
+
+  it('skips layout work for a re-theme, and keeps it otherwise', () => {
+    expect(md).toContain('Skip this step');
+    const full = { ...restyled, restyle: { ...restyled.restyle!, scope: 'full' as const } };
+    expect(restyleMd(full, deriveTokens(full))).toContain('Apply layout and component rules');
+  });
+
+  it('names the gradual target', () => {
+    const gradual = {
+      ...restyled,
+      restyle: { ...restyled.restyle!, scope: 'gradual' as const, gradualTarget: 'the Settings page' },
+    };
+    expect(restyleMd(gradual, deriveTokens(gradual))).toContain('Gradual: start with the Settings page');
+  });
+
+  it('protects copy only if it was kept', () => {
+    expect(md).toContain('Do not change functionality, data logic, or routes.');
+    const copy = { ...restyled, restyle: { ...restyled.restyle!, keep: ['functionality', 'copy'] } };
+    expect(restyleMd(copy, deriveTokens(copy))).toContain('routes, or copy.');
+  });
+
+  it('still works with nothing pasted', () => {
+    const blank = createDefaultConfig('restyle');
+    const output = restyleMd(blank, deriveTokens(blank));
+    expect(output).toContain('Match each old colour you find');
+    expect(output).toContain('Keep: nothing beyond functionality');
+  });
+
+  it('replaces the kickoff prompt in restyle mode', () => {
+    const labels = generateFiles(restyled, deriveTokens(restyled)).map((file) => file.label);
+    expect(labels).toContain('RESTYLE.md');
+    expect(labels).not.toContain('KICKOFF prompt');
   });
 });
