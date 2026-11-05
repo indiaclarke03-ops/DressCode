@@ -90,7 +90,7 @@ export default function FlowLayout({ mode }: { mode: FlowMode }) {
               ) : (
                 <span />
               )}
-              {next ? (
+              {next && !step.ownsNext ? (
                 <Button asChild>
                   <Link to={stepPath(mode, next.id)}>
                     Continue

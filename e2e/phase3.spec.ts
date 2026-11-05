@@ -11,6 +11,8 @@ async function configFromUrl(page: Page) {
 
 const round = (page: Page, n: number) => expect(page.getByText(`Round ${n} of 8`)).toBeVisible();
 
+const nextRound = (page: Page) => page.getByRole('button', { name: 'Next round' }).click();
+
 test('a full Start fresh run-through reaches Review with every choice saved', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
@@ -23,20 +25,28 @@ test('a full Start fresh run-through reaches Review with every choice saved', as
 
   await round(page, 1);
   await page.getByRole('radio', { name: 'Dark' }).click();
+  await nextRound(page);
   await round(page, 2);
   await page.getByRole('radio', { name: 'Airy' }).click();
+  await nextRound(page);
   await round(page, 3);
   await page.getByRole('radio', { name: 'Soft' }).click();
+  await nextRound(page);
   await round(page, 4);
   await page.getByRole('radio', { name: 'Layered' }).click();
+  await nextRound(page);
   await round(page, 5);
   await page.getByRole('radio', { name: 'Multi-colour' }).click();
+  await nextRound(page);
   await round(page, 6);
   await page.getByRole('radio', { name: 'Serif', exact: true }).click();
+  await nextRound(page);
   await round(page, 7);
   await page.getByRole('radio', { name: 'Expressive' }).click();
+  await nextRound(page);
   await round(page, 8);
   await page.getByRole('radio', { name: 'Editorial' }).click();
+  await page.getByRole('button', { name: 'Continue' }).click();
 
   await expect(page).toHaveURL(/#\/fresh\/colour/);
   await page.getByRole('radio', { name: 'Teal' }).click();
@@ -85,14 +95,47 @@ test('This or That works from the keyboard alone', async ({ page }) => {
   await page.goto('./#/fresh/this-or-that');
   await round(page, 1);
   await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('Enter');
   await round(page, 2);
   await page.keyboard.press('n');
+  await page.keyboard.press('Enter');
   await round(page, 3);
   await page.keyboard.press('ArrowLeft');
+  await page.keyboard.press('Enter');
   await round(page, 4);
   const config = await configFromUrl(page);
   expect(config.theme).toBe('dark');
   expect(config.radius).toBe('sharp');
+});
+
+test('choosing never moves on by itself, and a choice can be changed', async ({ page }) => {
+  await page.goto('./#/fresh/this-or-that');
+  const next = page.getByRole('button', { name: 'Next round' });
+  await expect(next).toBeDisabled();
+
+  await page.getByRole('radio', { name: 'Light' }).click();
+  await page.getByRole('radio', { name: 'Dark' }).click();
+  await page.waitForTimeout(600);
+  await round(page, 1);
+  await expect(page.getByRole('radio', { name: 'Dark' })).toBeChecked();
+  await expect(page.getByRole('link', { name: 'Continue' })).toHaveCount(0);
+
+  await next.click();
+  await round(page, 2);
+  await expect(next).toBeDisabled();
+  await page.getByRole('button', { name: 'Previous round' }).click();
+  await expect(page.getByRole('radio', { name: 'Dark' })).toBeChecked();
+  expect((await configFromUrl(page)).theme).toBe('dark');
+});
+
+test('No preference waits for Next too, and can be replaced by a pick', async ({ page }) => {
+  await page.goto('./#/fresh/this-or-that');
+  const skip = page.getByRole('button', { name: 'No preference' });
+  await skip.click();
+  await round(page, 1);
+  await expect(skip).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('radio', { name: 'Dark' }).click();
+  await expect(skip).toHaveAttribute('aria-pressed', 'false');
 });
 
 test('keys typed in a text field are not treated as round choices', async ({ page }) => {

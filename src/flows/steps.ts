@@ -8,6 +8,8 @@ export interface FlowStep {
   description: string;
   /** Build phase that delivers this step. Remove once every step is live. */
   phase: number;
+  /** The step moves on from its own button, so the flow hides Continue. */
+  ownsNext?: boolean;
 }
 
 const projectStep: FlowStep = {
@@ -23,8 +25,9 @@ const designSteps: FlowStep[] = [
     id: 'this-or-that',
     label: 'This or that',
     title: 'This or that',
-    description: 'Eight quick rounds. Pick the one you prefer, or skip it.',
+    description: "Eight quick rounds. Pick the one you prefer, then move on when you're sure.",
     phase: 3,
+    ownsNext: true,
   },
   {
     id: 'colour',

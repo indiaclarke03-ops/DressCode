@@ -1,4 +1,5 @@
 import { m } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useConfig } from '@/app/ConfigContext';
 import { configReducer, type ConfigAction } from '@/app/configReducer';
@@ -11,8 +12,8 @@ import { SCENE_FOR_PROJECT } from '@/tokens/defaults';
 import type { ChoiceKey, Choices, DesignConfig } from '@/tokens/types';
 import { ROUNDS, type Round, type RoundOption } from './rounds';
 
-/** Long enough to see your choice land before the next round. */
-const ADVANCE_DELAY_MS = 220;
+/** Marks a round answered with "No preference", as distinct from unanswered. */
+const NO_PREFERENCE = 'no-preference';
 
 const setChoice = (key: ChoiceKey, value: string): ConfigAction => ({
   type: 'set',
@@ -40,45 +41,52 @@ function RoundOptionCard({ round, option, config }: { round: Round; option: Roun
 export function ThisOrThat({ onDone }: { onDone: () => void }) {
   const { config, dispatch } = useConfig();
   const [index, setIndex] = useState(0);
-  const [picked, setPicked] = useState<Partial<Record<ChoiceKey, string>>>({});
-  const timer = useRef<number | undefined>(undefined);
+  const [answers, setAnswers] = useState<Partial<Record<ChoiceKey, string>>>({});
   const heading = useRef<HTMLHeadingElement>(null);
   const round = ROUNDS[index] ?? ROUNDS[0];
-
-  useEffect(() => () => window.clearTimeout(timer.current), []);
+  const answer = round ? answers[round.key] : undefined;
 
   useEffect(() => {
     if (index > 0) heading.current?.focus({ preventScroll: true });
   }, [index]);
 
   const advance = useCallback(() => {
-    timer.current = undefined;
     if (index + 1 < ROUNDS.length) setIndex(index + 1);
     else onDone();
   }, [index, onDone]);
 
   const pick = useCallback(
     (value: string) => {
-      if (!round || timer.current !== undefined) return;
+      if (!round) return;
       dispatch(setChoice(round.key, value));
-      setPicked((current) => ({ ...current, [round.key]: value }));
-      timer.current = window.setTimeout(advance, ADVANCE_DELAY_MS);
+      setAnswers((current) => ({ ...current, [round.key]: value }));
     },
-    [advance, dispatch, round],
+    [dispatch, round],
   );
 
   const skip = useCallback(() => {
-    if (!round || timer.current !== undefined) return;
+    if (!round) return;
     dispatch({ type: 'noPreference', key: round.key });
-    setPicked(({ [round.key]: _cleared, ...rest }) => rest);
-    advance();
-  }, [advance, dispatch, round]);
+    setAnswers((current) => ({ ...current, [round.key]: NO_PREFERENCE }));
+  }, [dispatch, round]);
 
   useEffect(() => {
     if (!round) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.repeat || event.metaKey || event.ctrlKey || event.altKey) return;
       const key = event.key.toLowerCase();
+
+      if (key === 'enter') {
+        const onOtherControl =
+          event.target instanceof HTMLElement &&
+          event.target.closest('a, button:not([role="radio"])') !== null;
+        if (answer && !onOtherControl) {
+          event.preventDefault();
+          advance();
+        }
+        return;
+      }
+
       if (key !== 'arrowleft' && key !== 'arrowright' && key !== 'n') return;
       // Capture phase: otherwise the radio group also treats the arrows as its own.
       event.preventDefault();
@@ -88,10 +96,10 @@ export function ThisOrThat({ onDone }: { onDone: () => void }) {
     };
     window.addEventListener('keydown', onKeyDown, { capture: true });
     return () => window.removeEventListener('keydown', onKeyDown, { capture: true });
-  }, [pick, round, skip]);
+  }, [advance, answer, pick, round, skip]);
 
   if (!round) return null;
-  const current = picked[round.key];
+  const isLastRound = index + 1 === ROUNDS.length;
 
   return (
     <m.div
@@ -114,7 +122,7 @@ export function ThisOrThat({ onDone }: { onDone: () => void }) {
 
       <ChoiceGroup
         label={round.title}
-        value={current ?? ''}
+        value={answer === NO_PREFERENCE ? '' : (answer ?? '')}
         onValueChange={pick}
         className="grid gap-4 md:grid-cols-2"
       >
@@ -128,18 +136,17 @@ export function ThisOrThat({ onDone }: { onDone: () => void }) {
             Previous round
           </Button>
         ) : null}
-        <Button variant="secondary" onClick={skip}>
+        <Button variant="secondary" aria-pressed={answer === NO_PREFERENCE} onClick={skip} className="aria-pressed:border-accent">
           No preference
         </Button>
-        {current ? (
-          <Button variant="secondary" onClick={advance}>
-            Next round
-          </Button>
-        ) : null}
-        <p className="m-0 ml-auto hidden font-mono text-label text-muted lg:block">
-          Left and right arrow keys to choose, N for no preference
-        </p>
+        <Button className="ml-auto" disabled={!answer} onClick={advance}>
+          {isLastRound ? 'Continue' : 'Next round'}
+          <ArrowRight aria-hidden size={16} />
+        </Button>
       </div>
+      <p className="mt-3 mb-0 hidden text-right font-mono text-label text-muted lg:block">
+        Arrow keys to choose, N for no preference, Enter to move on
+      </p>
     </m.div>
   );
 }
