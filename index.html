@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dress Code</title>
+    <meta
+      name="description"
+      content="Dress Code turns visual choices into a precise design brief for Claude Code or any AI coding agent. Pick, don't describe."
+    />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F7F5F0" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#141413" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Dress Code" />
+    <meta
+      property="og:description"
+      content="Turn visual choices into a precise design brief for your AI coding agent."
+    />
+    <meta property="og:url" content="https://indiaclarke03-ops.github.io/DressCode/" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Geist:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
+    />
+    <script>
+      // Set the theme before first paint so dark-mode visitors never see a light flash.
+      (function () {
+        var stored = null;
+        try {
+          stored = localStorage.getItem('dress-code-theme');
+        } catch (e) {}
+        var dark = matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = stored === 'light' || stored === 'dark' ? stored : dark ? 'dark' : 'light';
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

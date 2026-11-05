@@ -1,0 +1,49 @@
+/* The single home for Dress Code's style values (SPEC §12). */
+
+:root {
+  color-scheme: light;
+  --dc-background: #f7f5f0;
+  --dc-surface: #ffffff;
+  --dc-border: #e3dfd6;
+  --dc-border-strong: #bdb7a9;
+  --dc-text: #1a1915;
+  --dc-text-muted: #6e6a60;
+  --dc-accent: #c2552d;
+  /* #C2552D is 4.16:1 on the page background, below AA for small text. */
+  --dc-accent-text: #b0491f;
+  --dc-on-accent: #ffffff;
+  --dc-accent-hover: #a8461f;
+  --dc-shadow-selected: 0 6px 20px -8px rgb(26 25 21 / 0.22);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --dc-background: #141413;
+  --dc-surface: #1d1d1b;
+  --dc-border: #2e2d2a;
+  --dc-border-strong: #57544d;
+  --dc-text: #edebe5;
+  --dc-text-muted: #9c988e;
+  --dc-accent: #e07a52;
+  --dc-accent-text: #e07a52;
+  --dc-on-accent: #141413;
+  --dc-accent-hover: #ea8f6b;
+  --dc-shadow-selected: 0 6px 20px -8px rgb(0 0 0 / 0.7);
+}
+
+/* The landing comparison. Fixed in both themes: these are specimens, not UI. */
+:root {
+  --demo-generic-from: #7c3aed;
+  --demo-generic-to: #2563eb;
+  --demo-generic-surface: #ffffff;
+  --demo-generic-text: #1e1b4b;
+  --demo-generic-muted: #6f6e8a;
+  --demo-generic-shadow: 0 24px 48px -12px rgb(124 58 237 / 0.45);
+
+  --demo-brief-surface: #fafaf7;
+  --demo-brief-border: #e4e2dc;
+  --demo-brief-text: #1c1b18;
+  --demo-brief-muted: #6b6860;
+  --demo-brief-accent: #1f5c45;
+  --demo-brief-accent-soft: #cfdfd7;
+}
