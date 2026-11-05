@@ -9,7 +9,6 @@ const FlowLayout = lazy(() => import('@/flows/FlowLayout'));
 const Examples = lazy(() => import('@/pages/Examples'));
 const Tweaks = lazy(() => import('@/pages/Tweaks'));
 const Styles = lazy(() => import('@/pages/Styles'));
-const Kit = lazy(() => import('@/pages/Kit'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 
 /** Share links use #/review?c=...; send them to the review step of the saved mode. */
@@ -32,7 +31,6 @@ export function AppRoutes() {
         <Route path="styles" element={<Styles />} />
         <Route path="tweaks" element={<Tweaks />} />
         <Route path="examples" element={<Examples />} />
-        <Route path="kit" element={<Kit />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

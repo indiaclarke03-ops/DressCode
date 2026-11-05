@@ -15,7 +15,7 @@ const ROUTES = [
   { name: 'restyle-size', path: './#/restyle/size' },
   { name: 'styles', path: './#/styles' },
   { name: 'tweaks', path: './#/tweaks' },
-  { name: 'kit', path: './#/kit' },
+  { name: 'examples', path: './#/examples' },
 ];
 
 async function open(page: Page, path: string, theme: 'light' | 'dark') {
@@ -70,10 +70,10 @@ test('a mode card opens the first step, and deep links survive refresh', async (
 });
 
 test('choice cards are a keyboard radio group', async ({ page }) => {
-  await open(page, './#/kit', 'light');
-  await page.getByRole('radio', { name: /Airy/ }).focus();
+  await open(page, './#/fresh/colour', 'light');
+  await page.getByRole('radio', { name: 'Warm' }).focus();
   await page.keyboard.down('ArrowRight');
-  await expect(page.getByRole('radio', { name: /Compact/ })).toBeFocused();
+  await expect(page.getByRole('radio', { name: 'Neutral' })).toBeFocused();
   await page.keyboard.up('ArrowRight');
-  await expect(page.getByRole('radio', { name: /Compact/ })).toBeChecked();
+  await expect(page.getByRole('radio', { name: 'Neutral' })).toBeChecked();
 });

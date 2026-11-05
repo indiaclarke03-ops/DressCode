@@ -25,7 +25,7 @@ const ConfigContext = createContext<ConfigContextValue | null>(null);
 
 /** Only pages that edit a config carry it in the URL. Redirect routes must not: a write
  * while the next page loads would overwrite the redirect and strand the visitor. */
-const CONFIG_PAGES = /^\/((fresh|restyle)\/[^/]+|kit)$/;
+const CONFIG_PAGES = /^\/(fresh|restyle)\/[^/]+$/;
 
 /** Browsers rate-limit history writes, so wait for a pause in editing. */
 const URL_WRITE_DELAY_MS = 250;
@@ -57,6 +57,9 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     if (encoded === encodedInUrl) return;
 
     const timer = window.setTimeout(() => {
+      // A navigation can be under way before React commits it. Writing now would resolve
+      // against the old page and undo it, so skip; this effect reruns on the new page.
+      if (window.location.hash.slice(1).split('?')[0] !== pathname) return;
       knownEncoded.current = encoded;
       setSearchParams(
         (params) => {

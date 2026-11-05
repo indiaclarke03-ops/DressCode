@@ -1,32 +1,30 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
-const accent = (page: import('@playwright/test').Page) => page.getByTestId('accent');
-const configInUrl = (page: import('@playwright/test').Page) =>
-  new URL(page.url().replace('#', '')).searchParams.get('c');
+const hexField = (page: Page) => page.getByLabel(/Or enter a colour code/);
+const configInUrl = (page: Page) => new URL(page.url().replace('#', '')).searchParams.get('c');
 
 test('a choice reaches the URL and survives a refresh', async ({ page }) => {
-  await page.goto('./#/kit');
-  await page.getByRole('radio', { name: 'Dark' }).click();
+  await page.goto('./#/fresh/colour');
+  await page.getByRole('radio', { name: 'Cool' }).click();
   await page.getByRole('radio', { name: 'Oxblood' }).click();
   await expect.poll(() => configInUrl(page)).toBeTruthy();
-  await expect.poll(() => page.url()).toMatch(/c=/);
   await page.waitForTimeout(400);
 
   await page.reload();
-  await expect(accent(page)).toHaveText('#7A2230');
-  await expect(page.getByRole('radio', { name: 'Dark' })).toBeChecked();
+  await expect(hexField(page)).toHaveValue('#7A2230');
+  await expect(page.getByRole('radio', { name: 'Cool' })).toBeChecked();
 });
 
 test('a share link opens in a fresh browser with the exact config', async ({ page, browser }) => {
-  await page.goto('./#/kit');
+  await page.goto('./#/fresh/colour');
   await page.getByRole('radio', { name: 'Cool' }).click();
   await page.getByRole('radio', { name: 'Teal' }).click();
   await page.waitForTimeout(400);
   const encoded = configInUrl(page);
 
   const stranger = await browser.newPage({ baseURL: 'http://localhost:4173/DressCode/' });
-  await stranger.goto(`./#/kit?c=${encoded}`);
-  await expect(accent(stranger)).toHaveText('#0F6E6E');
+  await stranger.goto(`./#/fresh/colour?c=${encoded}`);
+  await expect(hexField(stranger)).toHaveValue('#0F6E6E');
   await expect(stranger.getByRole('radio', { name: 'Cool' })).toBeChecked();
   await stranger.close();
 });
@@ -41,29 +39,28 @@ test('#/review share links land on the review step of the saved mode', async ({ 
   await expect(page.getByRole('heading', { name: 'Review and export' })).toBeVisible();
 });
 
-test('the config survives moving between steps', async ({ page }) => {
-  await page.goto('./#/kit');
+test('the config survives leaving the flow and coming back', async ({ page }) => {
+  await page.goto('./#/fresh/colour');
   await page.getByRole('radio', { name: 'Moss' }).click();
   await page.locator('header').getByRole('link', { name: 'Dress Code' }).click();
   await page.getByRole('link', { name: /Start fresh/ }).click();
   await page.getByRole('link', { name: 'Continue' }).click();
   await page.waitForTimeout(400);
-  await page.goto(`./#/kit?c=${configInUrl(page)}`);
-  await expect(accent(page)).toHaveText('#5B6B2E');
+  await page.goto(`./#/fresh/colour?c=${configInUrl(page)}`);
+  await expect(hexField(page)).toHaveValue('#5B6B2E');
 });
 
 test('a corrupt share link falls back to defaults instead of crashing', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
-  await page.goto('./#/kit?c=not-a-real-config');
-  await expect(accent(page)).toHaveText('#1F5C45');
+  await page.goto('./#/fresh/colour?c=not-a-real-config');
+  await expect(hexField(page)).toHaveValue('#1F5C45');
   expect(errors).toEqual([]);
 });
 
 test('Fix contrast clears every failing pair', async ({ page }) => {
-  await page.goto('./#/kit');
-  await page.getByRole('radio', { name: 'Dark' }).click();
-  await page.getByRole('radio', { name: 'Ink blue' }).click();
+  await page.goto('./#/fresh/colour');
+  await page.getByRole('radio', { name: 'Ochre' }).click();
   await page.getByRole('button', { name: /Fix contrast/ }).click();
   await expect(page.getByRole('button', { name: 'All pairs pass' })).toBeDisabled();
   await expect(page.getByText(/ fail$/)).toHaveCount(0);

@@ -5,7 +5,6 @@ import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useConfig } from '@/app/ConfigContext';
 import { Button } from '@/components/ui/Button';
 import { Stepper } from '@/components/ui/Stepper';
-import { PagePlaceholder } from '@/pages/PagePlaceholder';
 import { ChangeSize } from './restyle/ChangeSize';
 import { CurrentProject } from './restyle/CurrentProject';
 import { KeepList } from './restyle/KeepList';
@@ -22,7 +21,6 @@ const PreviewPanel = lazy(() => import('@/preview/PreviewPanel'));
 
 const STEP_TRANSITION = { duration: 0.2, ease: 'easeOut' } as const;
 
-/** Steps without an entry here show their phase placeholder. */
 const STEP_BODIES: Record<string, ComponentType<{ onDone: () => void }>> = {
   project: ProjectType,
   current: CurrentProject,
@@ -57,7 +55,7 @@ export default function FlowLayout({ mode }: { mode: FlowMode }) {
 
   if (!step) return <Navigate to={firstStepPath(mode)} replace />;
 
-  const Body = STEP_BODIES[step.id];
+  const Body = STEP_BODIES[step.id] ?? ProjectType;
   const hasSidePreview = step.preview === 'side';
 
   return (
@@ -87,13 +85,9 @@ export default function FlowLayout({ mode }: { mode: FlowMode }) {
               </h1>
               <p className="mt-3 mb-0 max-w-reading text-muted">{step.description}</p>
 
-              {Body ? (
-                <div className="mt-8 @container">
-                  <Body onDone={goNext} />
-                </div>
-              ) : null}
-
-              {Body ? null : <PagePlaceholder phase={step.phase} />}
+              <div className="mt-8 @container">
+                <Body onDone={goNext} />
+              </div>
 
               <div className="mt-10 flex items-center justify-between border-t border-line pt-6">
                 {previous ? (
