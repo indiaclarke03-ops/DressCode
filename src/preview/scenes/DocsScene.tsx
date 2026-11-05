@@ -65,7 +65,7 @@ export default function DocsScene(props: SceneProps) {
 
   return (
     <div className="flex min-h-full">
-      <aside className="hidden w-48 shrink-0 border-r border-bb-border p-bb-3 @3xl:block">
+      <aside className="bb-band hidden w-48 shrink-0 border-r border-bb-border p-bb-3 @3xl:block">
         <Subtitle className="mb-bb-3">{brand}</Subtitle>
         {NAV.map((item) => (
           <NavItem key={item} active={item === 'Quick start'}>

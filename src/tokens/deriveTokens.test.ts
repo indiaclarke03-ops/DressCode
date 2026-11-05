@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { configReducer } from '@/app/configReducer';
+import { ROUNDS } from '@/flows/shared/rounds';
 import { toCssVars } from './cssVars';
 import { createDefaultConfig } from './defaults';
 import { deriveTokens, typeSizes } from './deriveTokens';
@@ -8,26 +9,21 @@ import { PROJECT_TYPES, type Choices, type DesignConfig } from './types';
 const vars = (config: DesignConfig) => toCssVars(deriveTokens(config));
 const base = createDefaultConfig('fresh', 'dashboard');
 
-const ROUNDS: { key: keyof Choices; a: string; b: string }[] = [
-  { key: 'theme', a: 'light', b: 'dark' },
-  { key: 'density', a: 'airy', b: 'compact' },
-  { key: 'radius', a: 'sharp', b: 'soft' },
-  { key: 'depth', a: 'flat', b: 'layered' },
-  { key: 'colorStrategy', a: 'mono-accent', b: 'expressive' },
-  { key: 'headingStyle', a: 'sans', b: 'serif' },
-  { key: 'motion', a: 'quiet', b: 'expressive' },
-  { key: 'layout', a: 'grid', b: 'editorial' },
-];
-
 describe('deriveTokens', () => {
   it('is deterministic', () => {
     expect(deriveTokens(base)).toEqual(deriveTokens(structuredClone(base)));
   });
 
-  it.each(ROUNDS)('$key changes the CSS variables', ({ key, a, b }) => {
-    const pick = (value: string) =>
-      configReducer(base, { type: 'set', patch: { [key]: value } as Partial<Choices> });
-    expect(vars(pick(a))).not.toEqual(vars(pick(b)));
+  it.each(ROUNDS)('every option of "$key" gives a different result', ({ key, options }) => {
+    const results = options.map(({ value }) =>
+      JSON.stringify(vars(configReducer(base, { type: 'set', patch: { [key]: value } as Partial<Choices> }))),
+    );
+    expect(new Set(results).size).toBe(options.length);
+  });
+
+  it('has eleven rounds, most with three or four options', () => {
+    expect(ROUNDS).toHaveLength(11);
+    expect(ROUNDS.filter((round) => round.options.length >= 3).length).toBeGreaterThanOrEqual(10);
   });
 
   it('responds to accent, neutral, pairing and type scale', () => {
@@ -44,11 +40,32 @@ describe('deriveTokens', () => {
   it('maps radius to the ranges in the spec', () => {
     expect(deriveTokens({ ...base, radius: 'sharp' }).radius).toEqual({ control: 2, card: 4 });
     expect(deriveTokens({ ...base, radius: 'soft' }).radius).toEqual({ control: 12, card: 16 });
+    expect(deriveTokens({ ...base, radius: 'none' }).radius).toEqual({ control: 0, card: 0 });
   });
 
   it('uses no shadows when flat, and shadows when layered', () => {
     expect(deriveTokens({ ...base, depth: 'flat' }).depth.card).toBe('none');
     expect(deriveTokens({ ...base, depth: 'layered' }).depth.card).toContain('px');
+    expect(deriveTokens({ ...base, depth: 'borderless' }).depth.card).toBe('none');
+  });
+
+  it('gives bold depth thick borders and a hard shadow in the text colour', () => {
+    const tokens = deriveTokens({ ...base, depth: 'bold' });
+    expect(tokens.depth.borderWidth).toBe(2);
+    expect(tokens.depth.card).toContain(tokens.colors.text);
+  });
+
+  it('replaces the accent with ink for black and white', () => {
+    const tokens = deriveTokens({ ...base, colorStrategy: 'monochrome' });
+    expect(tokens.colors.accent).toBe(tokens.colors.text);
+  });
+
+  it('fills bands with the accent only for colour blocks', () => {
+    const plain = deriveTokens(base);
+    expect(plain.band.background).toBe(plain.colors.surface);
+    const blocks = deriveTokens({ ...base, colorUse: 'blocks' });
+    expect(blocks.band.background).toBe(blocks.colors.accent);
+    expect(blocks.band.text).toBe(blocks.colors.accentForeground);
   });
 
   it('spells out data palettes where the spec asks for them', () => {

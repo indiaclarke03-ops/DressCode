@@ -36,7 +36,7 @@ export function ChoiceCard({ value, title, description, illustration }: ChoiceCa
     <RadioGroup.Item
       value={value}
       aria-label={description ? `${title}. ${description}` : title}
-      className="group relative flex min-h-11 w-full flex-col gap-3 rounded-card border border-line bg-surface p-4 text-left transition-[border-color,box-shadow,scale] duration-150 hover:border-line-strong data-[state=checked]:scale-101 data-[state=checked]:border-accent data-[state=checked]:shadow-selected"
+      className="group relative flex min-h-11 w-full min-w-0 flex-col gap-3 rounded-card border border-line bg-surface p-4 text-left transition-[border-color,box-shadow,scale] duration-150 hover:border-line-strong data-[state=checked]:scale-101 data-[state=checked]:border-accent data-[state=checked]:shadow-selected"
     >
       {illustration}
       <span className="block pr-7">

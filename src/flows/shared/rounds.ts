@@ -10,65 +10,124 @@ export interface Round {
   title: string;
   /** The one-line explanation shown with each round. */
   explanation: string;
-  a: RoundOption;
-  b: RoundOption;
+  options: RoundOption[];
 }
 
 export const ROUNDS: Round[] = [
   {
     key: 'theme',
-    title: 'Light or dark?',
-    explanation: 'Sets the mood, and how your project reads in different lighting.',
-    a: { value: 'light', label: 'Light' },
-    b: { value: 'dark', label: 'Dark' },
+    title: 'What should the page be?',
+    explanation: 'The biggest single decision. A coloured page feels nothing like a white one.',
+    options: [
+      { value: 'light', label: 'Light' },
+      { value: 'dark', label: 'Dark' },
+      { value: 'tinted', label: 'Tinted' },
+      { value: 'vivid', label: 'Colour-drenched' },
+    ],
   },
   {
     key: 'density',
-    title: 'Airy or compact?',
-    explanation: 'Airy gives things room to breathe. Compact fits more on screen.',
-    a: { value: 'airy', label: 'Airy' },
-    b: { value: 'compact', label: 'Compact' },
+    title: 'How much room?',
+    explanation: 'Compact fits more on screen. Oversized feels bold and unhurried.',
+    options: [
+      { value: 'compact', label: 'Compact' },
+      { value: 'airy', label: 'Comfortable' },
+      { value: 'oversized', label: 'Oversized' },
+    ],
   },
   {
     key: 'radius',
-    title: 'Sharp or soft corners?',
-    explanation: 'Sharp feels precise and serious. Soft feels friendly and approachable.',
-    a: { value: 'sharp', label: 'Sharp' },
-    b: { value: 'soft', label: 'Soft' },
+    title: 'What shape are the corners?',
+    explanation: 'Square feels graphic and strict. Pills feel friendly and playful.',
+    options: [
+      { value: 'none', label: 'Square' },
+      { value: 'sharp', label: 'Slight' },
+      { value: 'soft', label: 'Soft' },
+      { value: 'pill', label: 'Pill' },
+    ],
   },
   {
     key: 'depth',
-    title: 'Flat or layered?',
-    explanation: 'Flat separates things with thin lines. Layered lifts them with soft shadows.',
-    a: { value: 'flat', label: 'Flat' },
-    b: { value: 'layered', label: 'Layered' },
+    title: 'How do things stand apart?',
+    explanation: 'Thin lines stay quiet. Thick outlines and hard shadows make a statement.',
+    options: [
+      { value: 'flat', label: 'Thin lines' },
+      { value: 'layered', label: 'Soft shadows' },
+      { value: 'bold', label: 'Bold outlines' },
+      { value: 'borderless', label: 'Tone only' },
+    ],
   },
   {
     key: 'colorStrategy',
-    title: 'One colour or many?',
-    explanation: 'One main colour stays calm and focused. Several feel expressive and lively.',
-    a: { value: 'mono-accent', label: 'One main colour' },
-    b: { value: 'expressive', label: 'Multi-colour' },
+    title: 'How many colours?',
+    explanation: 'Fewer feels focused and confident. More feels energetic and expressive.',
+    options: [
+      { value: 'monochrome', label: 'Black and white' },
+      { value: 'mono-accent', label: 'One main colour' },
+      { value: 'duotone', label: 'Two colours' },
+      { value: 'expressive', label: 'Multi-colour' },
+    ],
+  },
+  {
+    key: 'colorUse',
+    title: 'How boldly should colour be used?',
+    explanation: 'A touch keeps it for key moments. Blocks fill headers and panels with it.',
+    options: [
+      { value: 'sparing', label: 'Just a touch' },
+      { value: 'blocks', label: 'Big colour blocks' },
+    ],
   },
   {
     key: 'headingStyle',
-    title: 'Sans-serif or serif headings?',
-    explanation: 'Sans-serif reads as modern and neutral. Serif feels editorial and considered.',
-    a: { value: 'sans', label: 'Sans-serif' },
-    b: { value: 'serif', label: 'Serif' },
+    title: 'What voice should headings have?',
+    explanation: 'Neutral, editorial, loud or technical. Headings set the personality.',
+    options: [
+      { value: 'sans', label: 'Sans-serif' },
+      { value: 'serif', label: 'Serif' },
+      { value: 'display', label: 'Display' },
+      { value: 'mono', label: 'Mono' },
+    ],
+  },
+  {
+    key: 'headingCase',
+    title: 'How loud are the headings?',
+    explanation: 'Capitals feel like signage. Oversized headings dominate the page.',
+    options: [
+      { value: 'sentence', label: 'Normal' },
+      { value: 'uppercase', label: 'Capitals' },
+      { value: 'oversized', label: 'Oversized' },
+    ],
+  },
+  {
+    key: 'texture',
+    title: 'Any texture behind the page?',
+    explanation: 'A little texture adds character. Plain keeps things clean.',
+    options: [
+      { value: 'none', label: 'Plain' },
+      { value: 'grain', label: 'Paper grain' },
+      { value: 'dots', label: 'Dot grid' },
+      { value: 'lines', label: 'Ruled lines' },
+    ],
   },
   {
     key: 'motion',
-    title: 'Quiet or expressive motion?',
+    title: 'How should it move?',
     explanation: 'Quiet motion stays out of the way. Expressive motion adds bounce and rhythm.',
-    a: { value: 'quiet', label: 'Quiet' },
-    b: { value: 'expressive', label: 'Expressive' },
+    options: [
+      { value: 'still', label: 'Not at all' },
+      { value: 'quiet', label: 'Quietly' },
+      { value: 'expressive', label: 'Expressively' },
+    ],
   },
   {
     key: 'layout',
-    title: 'Strict grid or editorial?',
-    explanation: 'A grid keeps everything lined up. Editorial uses asymmetry for a magazine feel.',
-    a: { value: 'grid', label: 'Strict grid' },
-    b: { value: 'editorial', label: 'Editorial' },
+    title: 'How should pages be arranged?',
+    explanation: 'From a strict grid to one huge idea per screen.',
+    options: [
+      { value: 'grid', label: 'Strict grid' },
+      { value: 'editorial', label: 'Editorial' },
+      { value: 'bento', label: 'Bento tiles' },
+      { value: 'poster', label: 'Poster' },
+    ],
   },
 ];

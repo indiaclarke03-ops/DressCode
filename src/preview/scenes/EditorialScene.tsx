@@ -68,7 +68,7 @@ function CheckIn({ kind }: { kind: string }) {
       <Subtitle>Quick check</Subtitle>
       <Text>What does a heat pump actually do?</Text>
       {QUIZ.map((answer, index) => (
-        <span key={answer} className={`rounded-bb-control border px-bb-2 py-1 text-bb-1 ${index === 0 ? 'border-bb-accent text-bb-accent' : 'border-bb-border text-bb-text'}`}>
+        <span key={answer} className={`rounded-bb-control border px-bb-2 py-1 text-bb-1 ${index === 0 ? 'border-bb-accent text-bb-accent-text' : 'border-bb-border text-bb-text'}`}>
           {answer}
         </span>
       ))}
@@ -104,10 +104,10 @@ export default function EditorialScene(props: SceneProps) {
   const copy = isExplainer ? LESSON : ARTICLE;
 
   return (
-    <div className="p-bb-4">
+    <div className="p-bb-4 poster:p-bb-5">
       <article
         data-width={width}
-        className={`flex flex-col gap-bb-3 @3xl:editorial:ml-[calc(var(--bb-content-offset)/var(--bb-columns)*100%)] ${WIDTHS[width] ?? WIDTHS.medium} ${scrollTriggered ? 'border-l-2 border-bb-accent pl-bb-3' : ''}`}
+        className={`flex flex-col gap-bb-3 @3xl:editorial:ml-[calc(var(--bb-content-offset)/var(--bb-columns)*100%)] ${WIDTHS[width] ?? WIDTHS.medium} poster:max-w-none ${scrollTriggered ? 'border-l-2 border-bb-accent pl-bb-3' : ''}`}
       >
         <Muted>{brand}</Muted>
         <Display>{topic}</Display>
@@ -131,7 +131,7 @@ export default function EditorialScene(props: SceneProps) {
           <AnnotatedTrend callouts={callouts} />
         </Panel>
 
-        <aside data-reveal className="rounded-bb-card bg-bb-background p-bb-3">
+        <aside data-reveal className="bb-band rounded-bb-card p-bb-3">
           <Subtitle>{copy.callout}</Subtitle>
           <Text className="mt-1">{copy.calloutText}</Text>
         </aside>

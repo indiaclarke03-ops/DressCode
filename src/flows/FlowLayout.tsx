@@ -10,6 +10,7 @@ import { CurrentProject } from './restyle/CurrentProject';
 import { KeepList } from './restyle/KeepList';
 import { AvoidList } from './shared/AvoidList';
 import { Colour } from './shared/Colour';
+import { Direction } from './shared/Direction';
 import { ProjectDetails } from './shared/ProjectDetails';
 import { ProjectType } from './shared/ProjectType';
 import { Review } from './shared/Review';
@@ -26,6 +27,7 @@ const STEP_BODIES: Record<string, ComponentType<{ onDone: () => void }>> = {
   current: CurrentProject,
   keep: KeepList,
   size: ChangeSize,
+  direction: Direction,
   'this-or-that': ThisOrThat,
   colour: Colour,
   typography: Typography,

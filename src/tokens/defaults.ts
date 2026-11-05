@@ -1,3 +1,4 @@
+import { findDirection } from './directions';
 import { defaultPairingId } from './fontPairings';
 import type { Choices, DesignConfig, ProjectType, RestyleConfig } from './types';
 
@@ -13,6 +14,16 @@ export const ACCENT_SWATCHES = [
   { name: 'Cobalt', hex: '#1E5AA8' },
   { name: 'Clay rose', hex: '#A8485A' },
   { name: 'Graphite', hex: '#3A3A36' },
+  { name: 'Signal red', hex: '#E5261F' },
+  { name: 'Hot pink', hex: '#E6287A' },
+  { name: 'Coral', hex: '#F2664B' },
+  { name: 'Tangerine', hex: '#F28C1E' },
+  { name: 'Sunflower', hex: '#F5C518' },
+  { name: 'Lime', hex: '#A6D608' },
+  { name: 'Mint', hex: '#3FCF9B' },
+  { name: 'Sky', hex: '#2BA6E8' },
+  { name: 'Electric blue', hex: '#0057E7' },
+  { name: 'Magenta', hex: '#C2187D' },
 ] as const;
 
 export const DEFAULT_ACCENT = ACCENT_SWATCHES[0].hex;
@@ -52,7 +63,10 @@ const BASE_CHOICES: Choices = {
   radius: 'sharp',
   depth: 'flat',
   colorStrategy: 'mono-accent',
+  colorUse: 'sparing',
   headingStyle: 'sans',
+  headingCase: 'sentence',
+  texture: 'none',
   motion: 'quiet',
   layout: 'grid',
 };
@@ -87,8 +101,13 @@ const PROJECT_CHOICES: Record<ProjectType, Partial<Choices>> = {
   other: PRODUCT,
 };
 
-export function choicesFor(projectType: ProjectType): Choices {
-  return { ...BASE_CHOICES, ...PROJECT_CHOICES[projectType] };
+/** A starting look outranks the project type's defaults. */
+export function choicesFor(projectType: ProjectType, direction = ''): Choices {
+  return {
+    ...BASE_CHOICES,
+    ...PROJECT_CHOICES[projectType],
+    ...findDirection(direction)?.choices,
+  };
 }
 
 export function createRestyleConfig(): RestyleConfig {
@@ -109,6 +128,7 @@ export function createDefaultConfig(
     version: 2,
     mode,
     name: '',
+    direction: '',
     projectType,
     ...choices,
     accent: DEFAULT_ACCENT,

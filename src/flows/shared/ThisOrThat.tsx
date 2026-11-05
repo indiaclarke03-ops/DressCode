@@ -30,7 +30,11 @@ function RoundOptionCard({ round, option, config }: { round: Round; option: Roun
       title={option.label}
       illustration={
         <TokenScope config={variant}>
-          {round.key === 'layout' ? <LayoutStrip kind={variant.layout} /> : <Demo />}
+          {round.key === 'layout' ? (
+            <LayoutStrip kind={variant.layout} />
+          ) : (
+            <Demo projectType={config.projectType} />
+          )}
           {round.key === 'motion' ? <MotionStrip /> : null}
         </TokenScope>
       }
@@ -87,12 +91,22 @@ export function ThisOrThat({ onDone }: { onDone: () => void }) {
         return;
       }
 
-      if (key !== 'arrowleft' && key !== 'arrowright' && key !== 'n') return;
+      const digit = Number(key);
+      const isDigit = digit >= 1 && digit <= round.options.length;
+      if (key !== 'arrowleft' && key !== 'arrowright' && key !== 'n' && !isDigit) return;
       // Capture phase: otherwise the radio group also treats the arrows as its own.
       event.preventDefault();
       event.stopPropagation();
-      if (key === 'n') skip();
-      else pick(key === 'arrowleft' ? round.a.value : round.b.value);
+      if (key === 'n') {
+        skip();
+        return;
+      }
+      const values = round.options.map((option) => option.value);
+      const position = values.indexOf(answer ?? '');
+      const step = key === 'arrowleft' ? values.length - 1 : 1;
+      const next = isDigit ? digit - 1 : (Math.max(position, key === 'arrowleft' ? 0 : -1) + step) % values.length;
+      const value = values[next];
+      if (value) pick(value);
     };
     window.addEventListener('keydown', onKeyDown, { capture: true });
     return () => window.removeEventListener('keydown', onKeyDown, { capture: true });
@@ -126,8 +140,9 @@ export function ThisOrThat({ onDone }: { onDone: () => void }) {
         onValueChange={pick}
         className="grid gap-4 @xl:grid-cols-2"
       >
-        <RoundOptionCard round={round} option={round.a} config={config} />
-        <RoundOptionCard round={round} option={round.b} config={config} />
+        {round.options.map((option) => (
+          <RoundOptionCard key={option.value} round={round} option={option} config={config} />
+        ))}
       </ChoiceGroup>
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
@@ -139,13 +154,16 @@ export function ThisOrThat({ onDone }: { onDone: () => void }) {
         <Button variant="secondary" aria-pressed={answer === NO_PREFERENCE} onClick={skip} className="aria-pressed:border-accent">
           No preference
         </Button>
+        <Button variant="ghost" onClick={onDone}>
+          Skip the rest
+        </Button>
         <Button className="ml-auto" disabled={!answer} onClick={advance}>
           {isLastRound ? 'Continue' : 'Next round'}
           <ArrowRight aria-hidden size={16} />
         </Button>
       </div>
       <p className="mt-3 mb-0 hidden text-right font-mono text-label text-muted lg:block">
-        Arrow keys to choose, N for no preference, Enter to move on
+        Number keys or arrows to choose, N for no preference, Enter to move on
       </p>
     </m.div>
   );

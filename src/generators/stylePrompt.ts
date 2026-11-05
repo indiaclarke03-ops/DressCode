@@ -1,5 +1,6 @@
 import type { DesignTokens } from '@/tokens/deriveTokens';
 import type { DesignConfig } from '@/tokens/types';
+import { direction } from './designMd';
 import { BEFORE_YOU_FINISH, doNotLines, sentenceList, styleTitle, withArticle } from './shared';
 
 export const MEDIUMS = [
@@ -71,6 +72,8 @@ export function stylePrompt(
 
   return [
     `Before you start, follow the "${styleTitle(config)}" brand style. We're making ${subject}.`,
+    '',
+    `The look: ${direction(config)}`,
     '',
     'Colours:',
     `- Background ${colors.background}, surface ${colors.surface}, border ${colors.border}`,

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { contrastRatio, ensureContrast, isLight, normalizeHex, toLch } from './color';
 import { generateDataPalette } from './dataPalette';
 import { ACCENT_SWATCHES } from './defaults';
-import { checkContrast, fixAccent, generatePalette, pickForeground } from './palette';
+import { baseTheme, checkContrast, fixAccent, generatePalette, pickForeground } from './palette';
 import { NEUTRALS, THEMES } from './types';
 
 const AWKWARD_ACCENTS = ['#FFFF00', '#808080', '#FFFFFF', '#000000', '#00FF00', '#FF00FF', '#777777'];
@@ -12,7 +12,7 @@ const everyCombination = ACCENTS.flatMap((accent) =>
   NEUTRALS.flatMap((neutral) => THEMES.map((theme) => ({ accent, neutral, theme }))),
 );
 
-const ACCENT_PAIRS = ['accent-background', 'accent-surface'];
+const ACCENT_PAIRS = ['accent-shape'];
 
 describe('contrastRatio', () => {
   it('matches known WCAG values', () => {
@@ -78,6 +78,20 @@ describe('generatePalette', () => {
     expect(new Set(backgrounds).size).toBe(3);
   });
 
+  it('keeps bright fills, and reads as text through accent-text', () => {
+    const palette = generatePalette('#F5C518', 'neutral', 'light');
+    expect(palette.accent).toBe('#F5C518');
+    expect(contrastRatio(palette.accentText, palette.background)).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it('colours the page itself in the tinted and vivid themes', () => {
+    const pale = generatePalette('#E6287A', 'neutral', 'tinted').background;
+    const deep = generatePalette('#E6287A', 'neutral', 'vivid').background;
+    expect(toLch(pale).c).toBeGreaterThan(0.02);
+    expect(toLch(deep).c).toBeGreaterThan(0.05);
+    expect(pale).not.toBe(generatePalette('#0057E7', 'neutral', 'tinted').background);
+  });
+
   it('keeps the chosen accent exactly as picked', () => {
     expect(generatePalette('#C2552D', 'warm', 'light').accent).toBe('#C2552D');
   });
@@ -95,7 +109,7 @@ describe('generateDataPalette', () => {
 
   it.each(everyCombination)('$accent $neutral $theme stays readable', (combo) => {
     const palette = generatePalette(combo.accent, combo.neutral, combo.theme);
-    const data = generateDataPalette(combo.accent, palette, combo.theme, 'expressive');
+    const data = generateDataPalette(palette.accent, palette, baseTheme(combo.theme), 'expressive');
     expect(data.categorical).toHaveLength(8);
     expect(new Set(data.categorical).size).toBeGreaterThanOrEqual(5);
     for (const colour of data.categorical) {
@@ -111,9 +125,22 @@ describe('generateDataPalette', () => {
     expect(data.categorical[0]).toBe('#1F5C45');
   });
 
+  it('uses greys only for black and white', () => {
+    const palette = generatePalette('#E6287A', 'neutral', 'light');
+    const data = generateDataPalette(palette.accent, palette, 'light', 'monochrome');
+    expect(data.categorical.slice(0, 5).every((hex) => toLch(hex).c < 0.01)).toBe(true);
+  });
+
+  it('keeps duotone to two hues', () => {
+    const palette = generatePalette('#0F6E6E', 'neutral', 'light');
+    const { categorical } = generateDataPalette(palette.accent, palette, 'light', 'duotone');
+    const hues = new Set(categorical.map((hex) => Math.round(toLch(hex).h / 20)));
+    expect(hues.size).toBeLessThanOrEqual(3);
+  });
+
   it.each(THEMES)('builds a sequential ramp that steps steadily in %s', (theme) => {
     const palette = generatePalette('#1F5C45', 'warm', theme);
-    const { sequential } = generateDataPalette('#1F5C45', palette, theme, 'mono-accent');
+    const { sequential } = generateDataPalette(palette.accent, palette, baseTheme(theme), 'mono-accent');
     expect(sequential).toHaveLength(5);
     const levels = sequential.map(lightness);
     const rising = (levels.at(-1) ?? 0) > (levels[0] ?? 0);
@@ -125,10 +152,10 @@ describe('generateDataPalette', () => {
 
   it.each(THEMES)('builds a seven-step diverging scale faded at the middle in %s', (theme) => {
     const palette = generatePalette('#1F5C45', 'warm', theme);
-    const { diverging } = generateDataPalette('#1F5C45', palette, theme, 'mono-accent');
+    const { diverging } = generateDataPalette(palette.accent, palette, baseTheme(theme), 'mono-accent');
     expect(diverging).toHaveLength(7);
     const middle = diverging[3] ?? '';
     expect(toLch(middle).c).toBeLessThan(0.01);
-    expect(isLight(middle)).toBe(theme === 'light');
+    expect(isLight(middle)).toBe(baseTheme(theme) === 'light');
   });
 });

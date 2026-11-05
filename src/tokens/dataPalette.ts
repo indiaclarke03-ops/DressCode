@@ -13,7 +13,10 @@ const AA_GRAPHIC = 3;
 
 /** Spaced for separation, not an even rainbow sweep; the first is the accent. */
 const HUE_OFFSETS = [0, 150, 60, 215, 300, 95, 255, 30];
-const SERIES_COUNT = { 'mono-accent': 5, expressive: 8 };
+const SERIES_COUNT = { monochrome: 5, 'mono-accent': 5, duotone: 5, expressive: 8 };
+/** Duotone pairs the accent with its near-opposite; lighter versions stretch the pair. */
+const DUOTONE_OFFSET = 150;
+const MONOCHROME_STEPS = [0.3, 0.45, 0.6, 0.72, 0.38];
 const SERIES_CHROMA = 0.1;
 const SERIES_LIGHTNESS = { light: 0.52, dark: 0.74 };
 
@@ -40,7 +43,7 @@ function ramp(from: string, to: string, steps: number): string[] {
 export function generateDataPalette(
   accent: string,
   palette: Palette,
-  theme: DesignConfig['theme'],
+  theme: 'light' | 'dark',
   strategy: DesignConfig['colorStrategy'],
 ): DataPalette {
   const backgrounds = [palette.background, palette.surface];
@@ -48,11 +51,19 @@ export function generateDataPalette(
   const anchor = graphic(accent);
   const { c, h } = toLch(anchor);
 
-  const categorical = HUE_OFFSETS.slice(0, SERIES_COUNT[strategy]).map((offset, index) =>
-    index === 0
-      ? anchor
-      : graphic(oklch({ l: SERIES_LIGHTNESS[theme], c: SERIES_CHROMA, h: h + offset })),
-  );
+  const series = (offset: number, index: number) => {
+    if (strategy === 'monochrome') {
+      const step = MONOCHROME_STEPS[index] ?? 0.5;
+      return graphic(oklch({ l: theme === 'light' ? step : 1 - step, c: 0, h: 0 }));
+    }
+    if (index === 0) return anchor;
+    if (strategy === 'duotone') {
+      const hue = h + (index % 2 ? DUOTONE_OFFSET : 0);
+      return graphic(oklch({ l: SERIES_LIGHTNESS[theme] + index * 0.03, c: SERIES_CHROMA, h: hue }));
+    }
+    return graphic(oklch({ l: SERIES_LIGHTNESS[theme], c: SERIES_CHROMA, h: h + offset }));
+  };
+  const categorical = HUE_OFFSETS.slice(0, SERIES_COUNT[strategy]).map(series);
 
   const faded = (hue: number, chroma: number) =>
     oklch({ l: FADED_LIGHTNESS[theme], c: chroma * FADED_CHROMA_SCALE, h: hue });
@@ -74,6 +85,7 @@ export function generateDataPalette(
 export function needsDataPalette(config: DesignConfig): boolean {
   return (
     config.colorStrategy === 'expressive' ||
+    config.colorStrategy === 'duotone' ||
     ['dashboard', 'simulator', 'map'].includes(config.projectType)
   );
 }

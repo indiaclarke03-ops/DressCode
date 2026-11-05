@@ -83,7 +83,7 @@ export function PreviewFrame({ defaultDevice = 'desktop' }: { defaultDevice?: Pr
   const style = useMemo(() => {
     const vars = toCssVars(tokens);
     const shown = canCompare && showCurrent && config.restyle ? currentCssVars(vars, config.restyle) : vars;
-    return { ...shown, colorScheme: tokens.theme } as CSSProperties;
+    return { ...shown, colorScheme: tokens.colorScheme } as CSSProperties;
   }, [canCompare, config.restyle, showCurrent, tokens]);
   const Scene = SCENES[SCENE_FOR_PROJECT[config.projectType]];
 
@@ -132,7 +132,7 @@ export function PreviewFrame({ defaultDevice = 'desktop' }: { defaultDevice?: Pr
             ref={page}
             data-layout={config.layout}
             data-testid="preview-page"
-            className="@container grid origin-top-left bg-bb-background font-bb-body text-bb-2 leading-(--bb-line-height) text-bb-text"
+            className="bb-texture @container grid origin-top-left bg-bb-background font-bb-body text-bb-2 leading-(--bb-line-height) text-bb-text"
             style={{
               ...style,
               width: pageWidth,

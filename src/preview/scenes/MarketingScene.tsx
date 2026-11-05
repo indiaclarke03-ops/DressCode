@@ -82,7 +82,7 @@ function Hero({ config, buttonKind }: SceneProps & { buttonKind: ButtonStyle }) 
     );
   }
   return (
-    <div className="grid items-center gap-bb-4 @3xl:grid-cols-2 @3xl:editorial:grid-cols-[3fr_2fr]">
+    <div className="grid items-center gap-bb-4 @3xl:grid-cols-2 @3xl:editorial:grid-cols-[3fr_2fr] poster:grid-cols-1">
       <div data-reveal>{text}</div>
       <Panel className="overflow-hidden">
         <Picture label={topicLabel(config)} className="h-56" />
@@ -120,7 +120,7 @@ export default function MarketingScene(props: SceneProps) {
 
   return (
     <div className="flex flex-col gap-bb-6 p-bb-4">
-      <header className="flex items-center justify-between gap-bb-3">
+      <header className="bb-band -mx-bb-4 -mt-bb-4 flex items-center justify-between gap-bb-3 p-bb-3">
         <Subtitle>{brand}</Subtitle>
         <nav className="hidden gap-bb-3 text-bb-1 text-bb-muted @3xl:flex">
           <span>About</span>
@@ -153,7 +153,7 @@ export default function MarketingScene(props: SceneProps) {
             ? 'flex flex-col gap-bb-4'
             : rhythm === 'big-full-width-moments'
               ? 'flex flex-col gap-bb-5'
-              : 'grid gap-bb-3 @3xl:grid-cols-3 @3xl:editorial:grid-cols-[2fr_1fr_1fr]'
+              : 'grid gap-bb-3 @3xl:grid-cols-3 @3xl:editorial:grid-cols-[2fr_1fr_1fr] @3xl:bento:grid-cols-2 @3xl:bento:*:first:col-span-2 poster:grid-cols-1'
         }
       >
         {copy.features.map((feature, index) => (

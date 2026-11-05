@@ -3,9 +3,11 @@ import { LOCKED_KEEP_ITEM } from './defaults';
 import { findPairing } from './fontPairings';
 import {
   COLOR_STRATEGIES,
+  COLOR_USES,
   CONFIG_MODES,
   DENSITIES,
   DEPTHS,
+  HEADING_CASES,
   HEADING_STYLES,
   LAYOUTS,
   MOTIONS,
@@ -13,6 +15,7 @@ import {
   PROJECT_TYPES,
   RADII,
   RESTYLE_SCOPES,
+  TEXTURES,
   THEMES,
   TYPE_SCALES,
   type DesignConfig,
@@ -101,6 +104,8 @@ export function parseConfig(raw: unknown): DesignConfig | null {
   const { mode, name, projectType, projectTypeOther, theme, density, radius, depth } = raw;
   const { colorStrategy, headingStyle, motion, layout, neutral, typeScale } = raw;
   const { fontPairingId, avoid } = raw;
+  // Links and saved styles from before these existed simply have no value for them.
+  const { direction = '', colorUse = 'sparing', headingCase = 'sentence', texture = 'none' } = raw;
 
   if (
     !isOneOf(CONFIG_MODES, mode) ||
@@ -113,6 +118,10 @@ export function parseConfig(raw: unknown): DesignConfig | null {
     !isOneOf(DEPTHS, depth) ||
     !isOneOf(COLOR_STRATEGIES, colorStrategy) ||
     !isOneOf(HEADING_STYLES, headingStyle) ||
+    !isText(direction) ||
+    !isOneOf(COLOR_USES, colorUse) ||
+    !isOneOf(HEADING_CASES, headingCase) ||
+    !isOneOf(TEXTURES, texture) ||
     !isOneOf(MOTIONS, motion) ||
     !isOneOf(LAYOUTS, layout) ||
     !isOneOf(NEUTRALS, neutral) ||
@@ -135,6 +144,7 @@ export function parseConfig(raw: unknown): DesignConfig | null {
     version: 2,
     mode,
     name,
+    direction,
     projectType,
     ...(projectTypeOther !== undefined ? { projectTypeOther } : {}),
     theme,
@@ -142,7 +152,10 @@ export function parseConfig(raw: unknown): DesignConfig | null {
     radius,
     depth,
     colorStrategy,
+    colorUse,
     headingStyle,
+    headingCase,
+    texture,
     motion,
     layout,
     accent,

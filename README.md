@@ -12,7 +12,7 @@ Everything runs in your browser. Nothing you paste is uploaded, and there are no
 
 ## Three ways to use it
 
-- **Start fresh:** about to build something new? Set the look first and get a `DESIGN.md`, `SKILL.md`, `CLAUDE.md` snippet, `tokens.css`, a Tailwind theme and a kickoff prompt.
+- **Start fresh:** about to build something new? Pick one of 12 very different starting looks, make it yours in a few quick rounds, and get a `DESIGN.md`, `SKILL.md`, `CLAUDE.md` snippet, `tokens.css`, a Tailwind theme and a kickoff prompt.
 - **Restyle existing:** have a working project you dislike the look of? Paste your styles or drop in a screenshot, and get a `RESTYLE.md` that changes how it looks without changing what it does.
 - **Quick tweaks:** want one small change? Find one of 46 tweaks, adjust it, and copy a short, precise prompt. Add several to the basket to send them together.
 

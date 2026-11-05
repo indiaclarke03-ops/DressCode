@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 /** Spans throughout: demos sit inside choice-card buttons, which allow phrasing content only. */
 export function DemoCard({ children }: { children: ReactNode }) {
   return (
-    <span className="block w-full rounded-bb-card border-(length:--bb-border-width) border-bb-border bg-bb-surface p-(--bb-space-4) shadow-bb-card">
+    <span className="bb-band block w-full rounded-bb-card border-(length:--bb-border-width) border-bb-card-border p-(--bb-space-4) shadow-bb-card">
       {children}
     </span>
   );
@@ -11,7 +11,7 @@ export function DemoCard({ children }: { children: ReactNode }) {
 
 export function Heading({ children }: { children: ReactNode }) {
   return (
-    <span className="block font-bb-heading text-(length:--bb-text-5) leading-tight font-(--bb-font-weight-heading) text-bb-text">
+    <span className="bb-heading block font-bb-heading text-[calc(var(--bb-text-5)*var(--bb-heading-scale))] leading-tight font-(--bb-font-weight-heading) text-bb-text">
       {children}
     </span>
   );
@@ -31,7 +31,7 @@ export function Figure({ children }: { children: ReactNode }) {
 
 export function SolidButton({ children }: { children: ReactNode }) {
   return (
-    <span className="mt-(--bb-space-2) inline-block rounded-bb-control bg-bb-accent px-(--bb-space-3) py-(--bb-space-1) text-bb-on-accent">
+    <span className="mt-(--bb-space-2) inline-block rounded-bb-control bg-bb-accent px-(--bb-space-3) py-(--bb-space-1) whitespace-nowrap text-bb-on-accent">
       {children}
     </span>
   );

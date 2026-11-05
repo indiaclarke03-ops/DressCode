@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test';
 test('every example opens and can be edited', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('./#/examples');
-  const names = ['Quiet Ledger', 'Morning Edition', 'Harbour', 'Night Shift', 'Open House', 'Field Guide'];
+  const names = ['Quiet Ledger', 'Broadsheet', 'Pop Riot', 'Terminal', 'Velvet Room', 'Playground', 'Blueprint', 'Swiss Poster', 'Sunday Supplement', 'Harbour', 'Arcade', 'Field Notes'];
   for (const name of names) {
     await page.goto('./#/examples');
     await page.getByRole('link', { name: new RegExp(name) }).click();
@@ -56,6 +56,7 @@ const WIDTHS = [
 ];
 const PAGES = [
   ['landing', './'],
+  ['direction', './#/fresh/direction'],
   ['this-or-that', './#/fresh/this-or-that'],
   ['colour', './#/fresh/colour'],
   ['typography', './#/fresh/typography'],
@@ -104,3 +105,24 @@ test('Continue is never undone by the delayed URL save', async ({ page }) => {
     }
   }
 });
+
+const LOOKS = ['Quiet Ledger', 'Broadsheet', 'Pop Riot', 'Terminal', 'Velvet Room', 'Playground', 'Blueprint', 'Swiss Poster', 'Sunday Supplement', 'Harbour', 'Arcade', 'Field Notes'];
+
+for (const name of LOOKS) {
+  test(`the full ${name} scene reads well`, async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.goto('./#/examples');
+    await page.getByRole('link', { name: new RegExp(name) }).click();
+    await expect(page.getByLabel('Name your style')).toHaveValue(name);
+    const scene = page.locator('[data-testid="preview-page"]');
+    await expect(scene.locator('h1, h2').first()).toBeVisible();
+    await page.waitForTimeout(700);
+    await scene.evaluate((el) => el.removeAttribute('inert'));
+    const { violations } = await new AxeBuilder({ page })
+      .include('[data-testid="preview-page"]')
+      .withRules(['color-contrast'])
+      .analyze();
+    expect(violations.flatMap((v) => v.nodes.map((n) => `${n.target}: ${n.any[0]?.message ?? ''}`.slice(0, 170)))).toEqual([]);
+    await scene.screenshot({ path: `e2e/screenshots/look-${name.toLowerCase().replaceAll(' ', '-')}.png` });
+  });
+}

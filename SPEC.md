@@ -587,6 +587,20 @@ Stop after each phase so I can review it in the browser.
 
 ---
 
+## 17b. Style range (added after v1 review)
+
+Early versions produced styles that were too alike: every choice sat on the same off-white or near-black page with a muted accent. The tool must let people produce very different-looking products.
+
+- **Pick a starting look:** a new step after the project picker, with 12 directions far apart from each other (`src/tokens/directions.ts`), plus "Start from the basics". Each look sets every choice, colour and font. "No preference" in later rounds then means the look's value.
+- **This or that** grows from 8 two-way rounds to 11 rounds of up to 4 options, adding colour use, heading treatment and texture. "Skip the rest" keeps the current choices. Number keys choose an option.
+- **Wider options:** coloured pages (tinted, colour-drenched), square and pill corners, bold outlines with hard shadows, tone-only surfaces, black and white, two-colour palettes, display and mono headings, bento and poster layouts, 20 accents and 25 font pairings.
+- **Bright accents:** the palette keeps a separate `accent-text` value, so a fill can stay bright while text in that colour stays readable.
+- **Examples** show the same 12 looks, each on a project that suits it.
+- **Tests guard the range:** every option in every round changes the output, and any two looks differ in at least 4 of the 11 choices.
+- Share links and saved styles from before this change still open, with plain defaults for new settings.
+
+---
+
 ## 18. Open decisions
 
 - Tagline (name is final: Dress Code)

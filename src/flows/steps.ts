@@ -21,10 +21,17 @@ const projectStep: FlowStep = {
 
 const designSteps: FlowStep[] = [
   {
+    id: 'direction',
+    label: 'Look',
+    title: 'Pick a starting look',
+    description: "Twelve very different directions. Choose the closest; you can change everything next.",
+    preview: 'side',
+  },
+  {
     id: 'this-or-that',
     label: 'This or that',
     title: 'This or that',
-    description: "Eight quick rounds. Pick the one you prefer, then move on when you're sure.",
+    description: "Eleven quick rounds to make it yours. Pick what you like, and move on when you're sure.",
     preview: 'side',
     ownsNext: true,
   },

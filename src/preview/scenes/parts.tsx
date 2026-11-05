@@ -10,21 +10,21 @@ export function Panel({ children, className = '' }: BoxProps) {
   return (
     <div
       data-reveal
-      className={`rounded-bb-card border-(length:--bb-border-width) border-bb-border bg-bb-surface shadow-bb-card ${className}`}
+      className={`rounded-bb-card border-(length:--bb-border-width) border-bb-card-border bg-bb-surface shadow-bb-card ${className}`}
     >
       {children}
     </div>
   );
 }
 
-const HEADING = 'm-0 font-bb-heading leading-tight font-(--bb-font-weight-heading) text-bb-text';
+const HEADING = 'bb-heading m-0 font-bb-heading leading-tight font-(--bb-font-weight-heading) text-bb-text';
 
 export function Display({ children, className = '' }: BoxProps) {
-  return <h1 className={`${HEADING} text-bb-7 ${className}`}>{children}</h1>;
+  return <h1 className={`${HEADING} text-[calc(var(--bb-text-7)*var(--bb-heading-scale))] ${className}`}>{children}</h1>;
 }
 
 export function Title({ children, className = '' }: BoxProps) {
-  return <h2 className={`${HEADING} text-bb-5 ${className}`}>{children}</h2>;
+  return <h2 className={`${HEADING} text-[calc(var(--bb-text-5)*var(--bb-heading-scale))] ${className}`}>{children}</h2>;
 }
 
 export function Subtitle({ children, className = '' }: BoxProps) {
@@ -51,8 +51,8 @@ export type ButtonStyle = 'solid' | 'outlined' | 'text-with-arrow';
 
 const BUTTONS: Record<ButtonStyle, string> = {
   solid: 'bg-bb-accent text-bb-on-accent',
-  outlined: 'border border-bb-accent text-bb-accent',
-  'text-with-arrow': 'text-bb-accent underline underline-offset-4',
+  outlined: 'border border-bb-accent text-bb-accent-text',
+  'text-with-arrow': 'text-bb-accent-text underline underline-offset-4',
 };
 
 export function Btn({ children, kind = 'solid', className = '' }: BoxProps & { kind?: ButtonStyle }) {
@@ -97,7 +97,7 @@ export function Switch({ label, on }: { label: string; on: boolean }) {
 }
 
 export function Tag({ children, tone = 'muted' }: BoxProps & { tone?: 'muted' | 'accent' }) {
-  const colour = tone === 'accent' ? 'text-bb-accent border-bb-accent' : 'text-bb-muted border-bb-border';
+  const colour = tone === 'accent' ? 'text-bb-accent-text border-bb-accent' : 'text-bb-muted border-bb-border';
   return (
     <span className={`inline-block rounded-bb-control border px-bb-1 text-bb-1 whitespace-nowrap ${colour}`}>
       {children}
@@ -108,7 +108,7 @@ export function Tag({ children, tone = 'muted' }: BoxProps & { tone?: 'muted' | 
 /** Sidebars hide on phones, so the brand moves to a slim bar instead. */
 export function MobileBrand({ brand }: { brand: string }) {
   return (
-    <div className="border-b border-bb-border px-bb-4 py-bb-2 @3xl:hidden">
+    <div className="bb-band border-b border-bb-border px-bb-4 py-bb-2 @3xl:hidden">
       <Subtitle>{brand}</Subtitle>
     </div>
   );
@@ -117,7 +117,7 @@ export function MobileBrand({ brand }: { brand: string }) {
 export function NavItem({ children, active = false }: BoxProps & { active?: boolean }) {
   return (
     <span
-      className={`block rounded-bb-control px-bb-2 py-bb-1 text-bb-2 ${active ? 'bg-bb-background font-medium text-bb-accent' : 'text-bb-muted'}`}
+      className={`block rounded-bb-control px-bb-2 py-bb-1 text-bb-2 ${active ? 'font-medium text-bb-accent-text underline underline-offset-4' : 'text-bb-muted'}`}
     >
       {children}
     </span>
@@ -155,7 +155,7 @@ export function Picture({ className = '', label }: BoxProps & { label: string })
       role="img"
       aria-label={label}
       viewBox="0 0 400 240"
-      preserveAspectRatio="xMidYMax slice"
+      preserveAspectRatio="none"
       className={`block w-full ${className}`}
     >
       <rect width="400" height="240" className="fill-bb-emphasis-3" />

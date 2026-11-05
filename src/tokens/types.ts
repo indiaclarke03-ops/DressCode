@@ -1,12 +1,15 @@
 /** Each option list is the source of its union type and of URL validation. */
-export const THEMES = ['light', 'dark'] as const;
-export const DENSITIES = ['airy', 'compact'] as const;
-export const RADII = ['sharp', 'soft'] as const;
-export const DEPTHS = ['flat', 'layered'] as const;
-export const COLOR_STRATEGIES = ['mono-accent', 'expressive'] as const;
-export const HEADING_STYLES = ['sans', 'serif'] as const;
-export const MOTIONS = ['quiet', 'expressive'] as const;
-export const LAYOUTS = ['grid', 'editorial'] as const;
+export const THEMES = ['light', 'dark', 'tinted', 'vivid'] as const;
+export const DENSITIES = ['compact', 'airy', 'oversized'] as const;
+export const RADII = ['none', 'sharp', 'soft', 'pill'] as const;
+export const DEPTHS = ['flat', 'layered', 'bold', 'borderless'] as const;
+export const COLOR_STRATEGIES = ['monochrome', 'mono-accent', 'duotone', 'expressive'] as const;
+export const COLOR_USES = ['sparing', 'blocks'] as const;
+export const HEADING_STYLES = ['sans', 'serif', 'display', 'mono'] as const;
+export const HEADING_CASES = ['sentence', 'uppercase', 'oversized'] as const;
+export const TEXTURES = ['none', 'grain', 'dots', 'lines'] as const;
+export const MOTIONS = ['still', 'quiet', 'expressive'] as const;
+export const LAYOUTS = ['grid', 'editorial', 'bento', 'poster'] as const;
 export const NEUTRALS = ['cool', 'warm', 'neutral'] as const;
 export const TYPE_SCALES = ['tight', 'balanced', 'dramatic'] as const;
 export const CONFIG_MODES = ['fresh', 'restyle'] as const;
@@ -46,6 +49,8 @@ export interface DesignConfig {
   version: 2;
   mode: Exclude<Mode, 'tweak'>;
   name: string;
+  /** The starting look, if one was picked. Empty when building from the basics. */
+  direction: string;
   projectType: ProjectType;
   projectTypeOther?: string;
   theme: (typeof THEMES)[number];
@@ -53,7 +58,10 @@ export interface DesignConfig {
   radius: (typeof RADII)[number];
   depth: (typeof DEPTHS)[number];
   colorStrategy: (typeof COLOR_STRATEGIES)[number];
+  colorUse: (typeof COLOR_USES)[number];
   headingStyle: (typeof HEADING_STYLES)[number];
+  headingCase: (typeof HEADING_CASES)[number];
+  texture: (typeof TEXTURES)[number];
   motion: (typeof MOTIONS)[number];
   layout: (typeof LAYOUTS)[number];
   accent: string;
@@ -67,7 +75,7 @@ export interface DesignConfig {
 
 /** The eight This-or-That rounds. */
 export type ChoiceKey =
-  | 'theme' | 'density' | 'radius' | 'depth'
-  | 'colorStrategy' | 'headingStyle' | 'motion' | 'layout';
+  | 'theme' | 'density' | 'radius' | 'depth' | 'colorStrategy' | 'colorUse'
+  | 'headingStyle' | 'headingCase' | 'texture' | 'motion' | 'layout';
 
 export type Choices = Pick<DesignConfig, ChoiceKey>;

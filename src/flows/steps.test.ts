@@ -7,6 +7,7 @@ describe('flow steps', () => {
   it('gives Start fresh the seven steps A1 to A7', () => {
     expect(ids('fresh')).toEqual([
       'project',
+      'direction',
       'this-or-that',
       'colour',
       'typography',

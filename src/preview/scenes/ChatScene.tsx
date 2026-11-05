@@ -34,7 +34,7 @@ function Message({ from, text, bubbles }: { from: string; text: string; bubbles:
   return (
     <div
       data-reveal
-      className={`max-w-4/5 rounded-bb-card px-bb-3 py-bb-2 ${isUser ? 'self-end bg-bb-accent text-bb-on-accent' : 'self-start border-(length:--bb-border-width) border-bb-border bg-bb-surface text-bb-text shadow-bb-card'}`}
+      className={`max-w-4/5 rounded-bb-card px-bb-3 py-bb-2 ${isUser ? 'self-end bg-bb-accent text-bb-on-accent' : 'self-start border-(length:--bb-border-width) border-bb-card-border bg-bb-surface text-bb-text shadow-bb-card'}`}
     >
       <p className="m-0 text-bb-2">{text}</p>
     </div>
@@ -57,7 +57,7 @@ export default function ChatScene({ config }: SceneProps) {
   return (
     <div className={`grid min-h-full ${sources ? '@3xl:grid-cols-[1fr_17rem]' : ''}`}>
       <div className="flex min-w-0 flex-col gap-bb-3 p-bb-4">
-        <header>
+        <header className="bb-band -mx-bb-4 -mt-bb-4 p-bb-4">
           <Muted>{brand}</Muted>
           <Title>{topic}</Title>
         </header>

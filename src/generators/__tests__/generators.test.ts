@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { PROJECT_QUESTIONS } from '@/flows/shared/projectQuestions';
 import { createDefaultConfig } from '@/tokens/defaults';
+import { STYLE_PRESETS } from '@/tokens/presets';
 import { deriveTokens } from '@/tokens/deriveTokens';
 import { PROJECT_TYPES, type DesignConfig } from '@/tokens/types';
 import { claudeMdSnippet } from '../claudeMdSnippet';
@@ -76,6 +77,49 @@ describe('DESIGN.md', () => {
       expect(output).not.toMatch(/\bundefined\b|\bNaN\b|\[object/);
       expect(output).not.toMatch(/^- (gradients|emoji-icons|three-cards)$|mono-accent/m);
     }
+  });
+});
+
+describe('the wider range', () => {
+  const look = (id: string) => {
+    const preset = STYLE_PRESETS.find((item) => item.id === id);
+    if (!preset) throw new Error(id);
+    return preset.config;
+  };
+
+  it('describes each look differently, in real sentences', () => {
+    const sentences = STYLE_PRESETS.map((preset) => direction(preset.config));
+    expect(new Set(sentences).size).toBe(STYLE_PRESETS.length);
+    for (const sentence of sentences) expect(sentence).not.toMatch(/undefined|  |\.\./);
+  });
+
+  it('spells out the distinctive parts', () => {
+    const riot = look('pop-riot');
+    expect(direction(riot)).toContain('thick outlines with hard offset shadows');
+    expect(direction(riot)).toContain('uppercase');
+    expect(direction(riot)).toContain('Colour fills nav bars');
+    const output = designMd(riot, deriveTokens(riot));
+    expect(output).toContain('hard shadow');
+    expect(output).toContain('Background texture: dots');
+    expect(direction(look('broadsheet'))).toContain('Black and white only');
+    expect(direction(look('blueprint'))).toContain('Pages drenched in');
+    expect(designMd(look('terminal'), deriveTokens(look('terminal')))).toContain('nothing animates');
+  });
+
+  it('drops avoid rules that contradict a deliberate choice', () => {
+    const pills = look('playground');
+    expect(designMd(pills, deriveTokens(pills))).not.toContain('oversized border radius');
+    const riot = look('pop-riot');
+    expect(designMd(riot, deriveTokens(riot))).not.toContain('drop shadows on every element');
+  });
+
+  it('carries the look into brand prompts', () => {
+    const riot = look('pop-riot');
+    expect(stylePrompt(riot, deriveTokens(riot), 'slides')).toContain('The look: ');
+  });
+
+  it('names a style after its look when unnamed', () => {
+    expect(styleTitle({ ...look('terminal'), name: '' })).toBe('Terminal');
   });
 });
 
@@ -182,6 +226,10 @@ describe('names', () => {
     expect(describeColour('#1F5C45')).toBe('deep green');
     expect(describeColour('#3A3A36')).toBe('graphite');
     expect(describeColour('#B84A26')).toBe('terracotta');
+    expect(describeColour('#E5261F')).toBe('red');
+    expect(describeColour('#E6287A')).toBe('pink');
+    expect(describeColour('#7A2230')).toBe('deep red');
+    expect(describeColour('#F5C518')).toBe('pale yellow');
   });
 });
 

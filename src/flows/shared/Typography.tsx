@@ -59,10 +59,12 @@ export function Typography() {
               patch: { headingStyle: value as DesignConfig['headingStyle'] },
             })
           }
-          className="grid max-w-md grid-cols-2 gap-3"
+          className="grid max-w-2xl grid-cols-2 gap-3 @lg:grid-cols-4"
         >
           <ChoiceCard value="sans" title="Sans-serif" />
           <ChoiceCard value="serif" title="Serif" />
+          <ChoiceCard value="display" title="Display" />
+          <ChoiceCard value="mono" title="Mono" />
         </ChoiceGroup>
       </section>
 

@@ -53,6 +53,18 @@ describe('share links', () => {
   });
 });
 
+describe('links and styles from before the wider options', () => {
+  it('still open, with plain defaults for the new settings', () => {
+    const { direction, colorUse, headingCase, texture, ...old } = createDefaultConfig();
+    const decoded = decodeConfig(encodeRaw(old));
+    expect(decoded?.texture).toBe('none');
+    expect(decoded?.headingCase).toBe('sentence');
+    expect(decoded?.colorUse).toBe('sparing');
+    expect(decoded?.direction).toBe('');
+    expect(decoded).toEqual({ ...old, direction, colorUse, headingCase, texture });
+  });
+});
+
 describe('hostile or broken links', () => {
   const valid = createDefaultConfig();
 
@@ -75,6 +87,8 @@ describe('hostile or broken links', () => {
   it.each<[string, unknown]>([
     ['version', 1],
     ['theme', 'sepia'],
+    ['texture', 'plaid'],
+    ['headingCase', 'wavy'],
     ['density', 3],
     ['projectType', 'crypto'],
     ['accent', 'red; background: url(//evil)'],

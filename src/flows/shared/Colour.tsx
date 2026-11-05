@@ -51,6 +51,12 @@ export function Colour() {
             onChange={(accent) => dispatch({ type: 'setAccent', accent })}
           />
           <CustomHex />
+          {config.colorStrategy === 'monochrome' ? (
+            <p className="mt-3 mb-0 max-w-md text-sm text-muted">
+              You chose black and white, so this colour isn't shown. Pick another option in This or
+              that to bring it back.
+            </p>
+          ) : null}
         </section>
 
         <section>

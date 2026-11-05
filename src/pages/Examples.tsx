@@ -14,13 +14,13 @@ function ExampleCard({ preset }: { preset: StylePreset }) {
   const fonts = useMemo(() => deriveTokens(config).fonts.pairingName, [config]);
 
   return (
-    <li>
+    <li className="min-w-0">
       <Link
         to={`/${config.mode}/review?${CONFIG_PARAM}=${encodeConfig(config)}`}
         className="group flex h-full flex-col gap-4 rounded-card border border-line bg-surface p-4 transition-colors duration-150 hover:border-line-strong"
       >
         <TokenScope config={config} className="flex-1">
-          <Demo />
+          <Demo projectType={config.projectType} />
         </TokenScope>
         <span className="block">
           <span className="flex items-center gap-2 font-display text-heading text-ink">
@@ -44,8 +44,8 @@ export default function Examples() {
     <div className="mx-auto max-w-page px-4 py-10 md:px-8 md:py-16">
       <h1 className="m-0 font-display text-title font-normal text-ink">Example briefs</h1>
       <p className="mt-3 mb-0 max-w-reading text-muted">
-        Six finished styles. Open one to see its full brief, then change anything you like and make
-        it your own.
+        Twelve very different styles. Open one to see its full brief, then change anything you like
+        and make it your own.
       </p>
       <ul className="mt-8 grid list-none gap-5 p-0 md:grid-cols-2 lg:grid-cols-3">
         {STYLE_PRESETS.map((preset) => (

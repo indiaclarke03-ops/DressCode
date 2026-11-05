@@ -28,24 +28,43 @@ export function MotionStrip() {
   );
 }
 
+const BLOCK = 'block bg-bb-border';
+
 /** A page sketch, because layout only shows up at page scale. */
-export function LayoutStrip({ kind }: { kind: 'grid' | 'editorial' }) {
-  const block = 'block bg-bb-border';
+export function LayoutStrip({ kind }: { kind: 'grid' | 'editorial' | 'bento' | 'poster' }) {
   if (kind === 'grid') {
     return (
       <span className="grid w-full grid-cols-3 gap-2">
-        <span className={`${block} col-span-3 h-5`} />
-        <span className={`${block} h-14`} />
-        <span className={`${block} h-14`} />
-        <span className={`${block} h-14`} />
+        <span className={`${BLOCK} col-span-3 h-5`} />
+        <span className={`${BLOCK} h-14`} />
+        <span className={`${BLOCK} h-14`} />
+        <span className={`${BLOCK} h-14`} />
+      </span>
+    );
+  }
+  if (kind === 'bento') {
+    return (
+      <span className="grid w-full grid-cols-4 grid-rows-2 gap-2">
+        <span className="col-span-2 row-span-2 block h-24 bg-bb-accent" />
+        <span className={`${BLOCK} col-span-2`} />
+        <span className={BLOCK} />
+        <span className={BLOCK} />
+      </span>
+    );
+  }
+  if (kind === 'poster') {
+    return (
+      <span className="flex w-full flex-col gap-2">
+        <span className="block h-16 bg-bb-accent" />
+        <span className={`${BLOCK} h-4 w-2/3`} />
       </span>
     );
   }
   return (
     <span className="grid w-full grid-cols-6 gap-2">
-      <span className={`${block} col-span-4 col-start-2 h-5`} />
+      <span className={`${BLOCK} col-span-4 col-start-2 h-5`} />
       <span className="col-span-4 block h-14 bg-bb-accent" />
-      <span className={`${block} col-span-2 mt-5 h-9`} />
+      <span className={`${BLOCK} col-span-2 mt-5 h-9`} />
     </span>
   );
 }

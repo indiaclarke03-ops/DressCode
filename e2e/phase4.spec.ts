@@ -9,7 +9,9 @@ async function openScene(page: Page, project: RegExp) {
   await page.goto('./#/fresh/project');
   await page.getByRole('radio', { name: project }).click();
   await page.getByRole('link', { name: 'Continue' }).click();
-  await page.getByText('Round 1 of 8').waitFor();
+  await page.waitForURL(/direction/);
+  await page.getByRole('link', { name: 'Continue' }).click();
+  await page.getByText('Round 1 of 11').waitFor();
 }
 
 test.describe('desktop', () => {
@@ -43,20 +45,20 @@ test.describe('desktop', () => {
     await expect(page.locator(`${PAGE}[data-same-node="yes"]`)).toHaveCount(1);
   });
 
-  test('all eight rounds change the preview', async ({ page }) => {
+  test('all eleven rounds change the preview', async ({ page }) => {
     await page.goto('./#/fresh/this-or-that');
     await expect(page.locator(PAGE)).toBeVisible();
     const snapshot = () =>
       page.locator(PAGE).evaluate((el) => `${el.getAttribute('data-layout')}|${el.getAttribute('style')}`);
 
-    for (let round = 1; round <= 8; round += 1) {
-      await page.getByText(`Round ${round} of 8`).waitFor();
+    for (let round = 1; round <= 11; round += 1) {
+      await page.getByText(`Round ${round} of 11`).waitFor();
       const radios = page.getByRole('radio');
       await radios.nth(0).click();
       const first = await snapshot();
       await radios.nth(1).click();
       await expect.poll(snapshot).not.toBe(first);
-      if (round < 8) await page.getByRole('button', { name: 'Next round' }).click();
+      if (round < 11) await page.getByRole('button', { name: 'Next round' }).click();
     }
   });
 
@@ -124,7 +126,7 @@ for (const theme of ['light', 'dark'] as const) {
       page.on('pageerror', (error) => errors.push(error.message));
       await page.setViewportSize({ width: 1440, height: 900 });
       await openScene(page, project);
-      await page.getByRole('radio', { name: theme === 'dark' ? 'Dark' : 'Light' }).click();
+      await page.getByRole('radio', { name: theme === 'dark' ? 'Dark' : 'Light', exact: true }).click();
       if (theme === 'dark') {
         await page.waitForTimeout(400);
         await page.goto(page.url().replace('this-or-that', 'colour'));

@@ -32,7 +32,7 @@ const ROWS: Record<string, string[][]> = {
 
 function Sidebar({ brand }: { brand: string }) {
   return (
-    <aside className="hidden w-48 shrink-0 border-r border-bb-border p-bb-3 @3xl:block">
+    <aside className="bb-band hidden w-48 shrink-0 border-r border-bb-border p-bb-3 @3xl:block">
       <Subtitle className="mb-bb-3">{brand}</Subtitle>
       {NAV.map((item, index) => (
         <NavItem key={item} active={index === 0}>
@@ -45,7 +45,7 @@ function Sidebar({ brand }: { brand: string }) {
 
 function TopBar({ brand }: { brand: string }) {
   return (
-    <header className="flex items-center gap-bb-3 overflow-hidden border-b border-bb-border px-bb-4 py-bb-2">
+    <header className="bb-band flex items-center gap-bb-3 overflow-hidden border-b border-bb-border px-bb-4 py-bb-2">
       <Subtitle className="shrink-0">{brand}</Subtitle>
       <nav className="flex gap-bb-1">
         {NAV.map((item, index) => (
@@ -85,7 +85,7 @@ export default function DashboardScene({ config }: SceneProps) {
 
           {isInternal ? <Field label="Search substations" value="Riverside" kind={fieldStyle} /> : null}
 
-          <div className="grid grid-cols-2 gap-bb-3 @3xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-bb-3 @3xl:grid-cols-4 @3xl:bento:grid-cols-[2fr_1fr] @3xl:bento:*:first:row-span-3">
             {KPIS.map((kpi) => (
               <Panel key={kpi.label} className="p-bb-3">
                 <Muted>{kpi.label}</Muted>
@@ -95,7 +95,7 @@ export default function DashboardScene({ config }: SceneProps) {
             ))}
           </div>
 
-          <div className="grid gap-bb-3 @3xl:grid-cols-2 @3xl:editorial:grid-cols-[3fr_2fr]">
+          <div className="grid gap-bb-3 @3xl:grid-cols-2 @3xl:editorial:grid-cols-[3fr_2fr] @3xl:bento:grid-cols-[2fr_1fr] poster:grid-cols-1">
             <Panel className="p-bb-3">
               <Subtitle className="mb-bb-2">Price per MWh</Subtitle>
               <PriceLines palette={palette} />

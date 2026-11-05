@@ -83,7 +83,7 @@ export default function AppScene({ config }: SceneProps) {
   return (
     <div className="flex min-h-full">
       {nav !== 'top-bar' ? (
-        <aside className="hidden w-44 shrink-0 border-r border-bb-border p-bb-3 @3xl:block">
+        <aside className="bb-band hidden w-44 shrink-0 border-r border-bb-border p-bb-3 @3xl:block">
           <Subtitle className="mb-bb-3">{brand}</Subtitle>
           {navItems}
         </aside>
@@ -91,7 +91,7 @@ export default function AppScene({ config }: SceneProps) {
       <div className="min-w-0 flex-1">
         {nav === 'sidebar' ? <MobileBrand brand={brand} /> : null}
         {nav !== 'sidebar' ? (
-          <header className="flex items-center gap-bb-3 overflow-hidden border-b border-bb-border px-bb-4 py-bb-2">
+          <header className="bb-band flex items-center gap-bb-3 overflow-hidden border-b border-bb-border px-bb-4 py-bb-2">
             <Subtitle className="shrink-0">{brand}</Subtitle>
             <nav className="flex gap-bb-1">{navItems}</nav>
           </header>
@@ -101,7 +101,7 @@ export default function AppScene({ config }: SceneProps) {
             <Title>{topic}</Title>
             <Muted>Changes save for everyone in your workspace.</Muted>
           </div>
-          <div className="grid gap-bb-3 @3xl:grid-cols-2 @3xl:editorial:grid-cols-[3fr_2fr]">
+          <div className="grid gap-bb-3 @3xl:grid-cols-2 @3xl:editorial:grid-cols-[3fr_2fr] @3xl:bento:grid-cols-[2fr_1fr] poster:grid-cols-1">
             <Panel className="flex flex-col gap-bb-3 p-bb-3">
               <Subtitle>Details</Subtitle>
               <Field label="Workspace name" value="Northwind Freight" kind={fieldStyle} />

@@ -110,8 +110,9 @@ test('the Restyle flow runs end to end with no style pasted', async ({ page }) =
   await page.getByRole('link', { name: 'Continue' }).click();
   await page.getByRole('link', { name: 'Continue' }).click();
   await page.getByRole('link', { name: 'Continue' }).click();
-  await page.waitForURL(/this-or-that/);
-  await page.goto(page.url().replace('this-or-that', 'review'));
+  await page.waitForURL(/direction/);
+  await page.waitForTimeout(350);
+  await page.goto(page.url().replace('direction', 'review'));
   await page.getByRole('tab', { name: 'RESTYLE.md' }).click();
   await expect(page.getByRole('tabpanel').locator('pre')).toContainText('Match each old colour');
   expect(errors).toEqual([]);

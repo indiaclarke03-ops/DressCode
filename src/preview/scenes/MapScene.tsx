@@ -77,10 +77,10 @@ function Overlay({ type }: { type: string }) {
   return null;
 }
 
-export default function MapScene({ config }: SceneProps) {
+export default function MapScene({ config, tokens }: SceneProps) {
   const { brand, topic } = sceneName(config.projectType);
   const mapType = option(config, 'mapType', 'shaded-regions');
-  const basemap = option(config, 'basemap', config.theme === 'dark' ? 'minimal-dark' : 'minimal-light');
+  const basemap = option(config, 'basemap', tokens.colorScheme === 'dark' ? 'minimal-dark' : 'minimal-light');
   const legend = option(config, 'legendPosition', 'bottom-left');
   const sidePanel = option(config, 'sidePanel', 'yes') === 'yes';
 
@@ -90,7 +90,7 @@ export default function MapScene({ config }: SceneProps) {
 
   return (
     <div className="flex flex-col gap-bb-3 p-bb-4">
-      <header className="flex items-end justify-between gap-bb-3">
+      <header className="bb-band -mx-bb-4 -mt-bb-4 flex items-end justify-between gap-bb-3 p-bb-4">
         <div>
           <Muted>{brand}</Muted>
           <Title>{topic}</Title>

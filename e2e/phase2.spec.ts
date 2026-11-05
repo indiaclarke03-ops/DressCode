@@ -60,7 +60,7 @@ test('a corrupt share link falls back to defaults instead of crashing', async ({
 
 test('Fix contrast clears every failing pair', async ({ page }) => {
   await page.goto('./#/fresh/colour');
-  await page.getByRole('radio', { name: 'Ochre' }).click();
+  await page.getByRole('radio', { name: 'Sunflower' }).click();
   await page.getByRole('button', { name: /Fix contrast/ }).click();
   await expect(page.getByRole('button', { name: 'All pairs pass' })).toBeDisabled();
   await expect(page.getByText(/ fail$/)).toHaveCount(0);

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { AVOID_ITEMS, ACCENT_SWATCHES, choicesFor, createDefaultConfig, KEEP_ITEMS } from './defaults';
 import { FONT_PAIRINGS, defaultPairingId, findPairing, getPairing } from './fontPairings';
 import { normalizeHex, toLch } from './color';
+import { HEADING_STYLES } from './types';
 
 describe('defaults', () => {
   it('pre-checks the full avoid list', () => {
@@ -9,8 +10,8 @@ describe('defaults', () => {
     expect(createDefaultConfig().avoid).toHaveLength(14);
   });
 
-  it('offers ten valid accents with no default purple or indigo', () => {
-    expect(ACCENT_SWATCHES).toHaveLength(10);
+  it('offers twenty valid accents with no default purple or indigo', () => {
+    expect(ACCENT_SWATCHES).toHaveLength(20);
     for (const { hex } of ACCENT_SWATCHES) {
       expect(normalizeHex(hex)).toBe(hex);
       const { h, c } = toLch(hex);
@@ -42,14 +43,13 @@ describe('defaults', () => {
 });
 
 describe('font pairings', () => {
-  it('has 8-10 pairings with unique ids, covering both styles', () => {
-    expect(FONT_PAIRINGS.length).toBeGreaterThanOrEqual(8);
-    expect(FONT_PAIRINGS.length).toBeLessThanOrEqual(10);
+  it('has a wide range of pairings with unique ids', () => {
+    expect(FONT_PAIRINGS.length).toBeGreaterThanOrEqual(24);
     expect(new Set(FONT_PAIRINGS.map((pairing) => pairing.id)).size).toBe(FONT_PAIRINGS.length);
   });
 
   it('has a default pairing of the right style', () => {
-    for (const style of ['sans', 'serif'] as const) {
+    for (const style of HEADING_STYLES) {
       expect(findPairing(defaultPairingId(style))?.style).toBe(style);
     }
   });

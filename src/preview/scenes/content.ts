@@ -19,7 +19,7 @@ export const SCENE_NAMES: Partial<Record<ProjectType, { brand: string; topic: st
   editorial: { brand: 'The Ledger', topic: 'The long road to a battery' },
   datastory: { brand: 'Undercurrent', topic: 'Follow one lithium shipment' },
   report: { brand: 'Policy Brief 14', topic: 'Securing battery supply after 2030' },
-  explainer: { brand: 'Field Notes', topic: 'How a heat pump works' },
+  explainer: { brand: 'Heat Lab', topic: 'How a heat pump works' },
   docs: { brand: 'Transit Kit', topic: 'Quick start' },
   portfolio: { brand: 'Ines Okafor', topic: 'Selected work' },
   other: { brand: 'Northwind', topic: 'Your project' },
@@ -112,6 +112,8 @@ export const MARKETING_COPY: Partial<Record<ProjectType, MarketingCopy>> = {
   },
   ecommerce: {
     ...SOLAR,
+    lede: 'Hand tools made to last a lifetime, and sold by people who use them.',
+    cta: 'Shop the range',
     plansTitle: 'Shop',
     features: [
       { title: 'Made to be sharpened', text: 'Hardened steel that holds an edge for years, not months.' },

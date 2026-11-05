@@ -27,6 +27,7 @@ export function currentCssVars(
 
   const accent = vars['--bb-color-accent'];
   if (accent) {
+    vars['--bb-color-accent-text'] = accent;
     vars['--bb-color-accent-foreground'] = pickForeground(accent, '#111111');
     vars['--bb-emphasis-1'] = accent;
   }

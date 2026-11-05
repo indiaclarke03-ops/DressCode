@@ -1,5 +1,7 @@
 import type { ComponentType } from 'react';
+import { marketingCopy, sceneName } from '@/preview/scenes/content';
 import type { SceneFamily } from '@/tokens/defaults';
+import type { ProjectType } from '@/tokens/types';
 import { DemoCard, EmphasisBars, Figure, Heading, Muted, SolidButton } from './parts';
 
 function KpiDemo() {
@@ -47,7 +49,7 @@ function FormDemo() {
     <DemoCard>
       <Heading>Notifications</Heading>
       <Muted>Weekly summary email</Muted>
-      <span className="my-(--bb-space-1) block truncate rounded-bb-control border border-bb-border bg-bb-background px-(--bb-space-2) py-(--bb-space-1) text-bb-muted">
+      <span className="my-(--bb-space-1) block truncate rounded-bb-control border border-current px-(--bb-space-2) py-(--bb-space-1) text-bb-muted">
         sam@northwind.example
       </span>
       <SolidButton>Save changes</SolidButton>
@@ -71,36 +73,55 @@ function ChatDemo() {
   );
 }
 
-function HeroDemo() {
+interface DemoProps {
+  projectType: ProjectType;
+}
+
+function HeroDemo({ projectType }: DemoProps) {
+  const copy = marketingCopy(projectType);
   return (
     <DemoCard>
-      <Heading>Solar for every rooftop</Heading>
-      <Muted>Panels, install and a 25-year warranty for one monthly price.</Muted>
-      <SolidButton>Get a quote</SolidButton>
+      <Heading>{sceneName(projectType).topic}</Heading>
+      <Muted>{copy.lede}</Muted>
+      <SolidButton>{copy.cta}</SolidButton>
       <EmphasisBars />
     </DemoCard>
   );
 }
 
-function ArticleDemo() {
+function ArticleDemo({ projectType }: DemoProps) {
+  const { brand, topic } = sceneName(projectType);
   return (
     <DemoCard>
-      <Muted>Supply chains</Muted>
-      <Heading>The long road to a battery</Heading>
+      <Muted>{brand}</Muted>
+      <Heading>{topic}</Heading>
       <span className="mt-(--bb-space-2) block border-l-2 border-bb-emphasis-2 pl-(--bb-space-2) text-bb-text">
-        Most lithium crosses three borders before reaching a factory.
+        {projectType === 'explainer'
+          ? 'For every unit of electricity, you get about three units of heat.'
+          : 'Most lithium crosses three borders before reaching a factory.'}
       </span>
       <EmphasisBars />
     </DemoCard>
   );
 }
 
-function DocsDemo() {
+function DocsDemo({ projectType }: DemoProps) {
+  const { brand, topic } = sceneName(projectType);
+  if (projectType === 'portfolio') {
+    return (
+      <DemoCard>
+        <Muted>{brand}</Muted>
+        <Heading>{topic}</Heading>
+        <Muted>Signage, annual reports and public service design.</Muted>
+        <EmphasisBars />
+      </DemoCard>
+    );
+  }
   return (
     <DemoCard>
       <Heading>Quick start</Heading>
       <Muted>Install the client, then add your first route.</Muted>
-      <span className="mt-(--bb-space-2) block rounded-bb-control bg-bb-background px-(--bb-space-2) py-(--bb-space-1) font-bb-mono text-bb-text">
+      <span className="mt-(--bb-space-2) block rounded-bb-control border border-current px-(--bb-space-2) py-(--bb-space-1) font-bb-mono text-bb-text">
         npm install transit-kit
       </span>
       <EmphasisBars />
@@ -109,7 +130,7 @@ function DocsDemo() {
 }
 
 /** The mini component each project type is judged on in This or That. */
-export const DEMOS: Record<SceneFamily, ComponentType> = {
+export const DEMOS: Record<SceneFamily, ComponentType<DemoProps>> = {
   dashboard: KpiDemo,
   simulator: SliderDemo,
   map: MapDemo,

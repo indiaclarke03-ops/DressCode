@@ -1,5 +1,6 @@
 import { toLch } from '@/tokens/color';
 import { AVOID_ITEMS } from '@/tokens/defaults';
+import { findDirection } from '@/tokens/directions';
 import type { DesignConfig, ProjectType } from '@/tokens/types';
 
 export const PROJECT_LABELS: Record<ProjectType, string> = {
@@ -60,11 +61,11 @@ export function projectNoun(config: DesignConfig): string {
   return config.projectType === 'other' && other ? other : PROJECT_NOUNS[config.projectType];
 }
 
-const TITLE_WORD = { quiet: 'Quiet', expressive: 'Lively' };
+const TITLE_WORD = { still: 'Still', quiet: 'Quiet', expressive: 'Lively' };
 
 /** The chosen name, or a sensible one built from the choices. */
 export function styleTitle(config: DesignConfig): string {
-  const name = config.name.trim();
+  const name = config.name.trim() || findDirection(config.direction)?.name;
   if (name) return name;
   const noun = PROJECT_NOUNS[config.projectType].split(' ').at(-1) ?? 'style';
   return `${TITLE_WORD[config.motion]} ${noun[0]?.toUpperCase()}${noun.slice(1)}`;
@@ -80,10 +81,10 @@ export function styleSlug(config: DesignConfig): string {
 }
 
 const HUE_NAMES: [number, string][] = [
-  [20, 'red'],
+  [15, 'pink'],
   [50, 'terracotta'],
   [85, 'ochre'],
-  [115, 'olive'],
+  [115, 'yellow'],
   [165, 'green'],
   [215, 'teal'],
   [265, 'blue'],
@@ -91,22 +92,30 @@ const HUE_NAMES: [number, string][] = [
   [360, 'rose'],
 ];
 
+const VIVID_CHROMA = 0.19;
+const VIVID_NAMES: Record<string, string> = { terracotta: 'red', ochre: 'orange' };
+
 /** "Deep green" rather than a hex, for prose. */
 export function describeColour(hex: string): string {
   const { l, c, h } = toLch(hex);
   if (c < 0.03) return l < 0.45 ? 'graphite' : 'grey';
-  const hue = HUE_NAMES.find(([limit]) => h < limit)?.[1] ?? 'red';
-  if (l < 0.45) return `deep ${hue}`;
-  return l > 0.75 ? `pale ${hue}` : hue;
+  const hue = HUE_NAMES.find(([limit]) => h < limit)?.[1] ?? 'rose';
+  const named = c >= VIVID_CHROMA ? (VIVID_NAMES[hue] ?? hue) : hue;
+  if (l < 0.45) return `deep ${named === 'terracotta' ? 'red' : named}`;
+  return l > 0.8 ? `pale ${named}` : named;
 }
 
 const MAP_PROJECTS: ProjectType[] = ['map', 'datastory', 'report'];
 
 /** Turns stored avoid entries into "Do not" lines. Custom entries pass through. */
 export function doNotLines(config: DesignConfig): string[] {
-  const relevant = config.avoid.filter(
-    (entry) => entry !== 'loud-basemaps' || MAP_PROJECTS.includes(config.projectType),
-  );
+  // A rule can't contradict a deliberate choice elsewhere in the same brief.
+  const relevant = config.avoid.filter((entry) => {
+    if (entry === 'loud-basemaps') return MAP_PROJECTS.includes(config.projectType);
+    if (entry === 'oversized-radius') return config.radius !== 'pill';
+    if (entry === 'shadows-everywhere') return config.depth !== 'bold';
+    return true;
+  });
   return relevant.map((entry) => {
     const item = AVOID_ITEMS.find((candidate) => candidate.id === entry);
     return item ? item.rule : entry;

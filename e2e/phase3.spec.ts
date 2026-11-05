@@ -9,7 +9,7 @@ async function configFromUrl(page: Page) {
   return JSON.parse(new TextDecoder().decode(Uint8Array.from(json, (c) => c.charCodeAt(0))));
 }
 
-const round = (page: Page, n: number) => expect(page.getByText(`Round ${n} of 8`)).toBeVisible();
+const round = (page: Page, n: number) => expect(page.getByText(`Round ${n} of 11`)).toBeVisible();
 
 const nextRound = (page: Page) => page.getByRole('button', { name: 'Next round' }).click();
 
@@ -23,28 +23,17 @@ test('a full Start fresh run-through reaches Review with every choice saved', as
   await page.getByRole('radio', { name: /Data dashboard/ }).click();
   await page.getByRole('link', { name: 'Continue' }).click();
 
-  await round(page, 1);
-  await page.getByRole('radio', { name: 'Dark' }).click();
-  await nextRound(page);
-  await round(page, 2);
-  await page.getByRole('radio', { name: 'Airy' }).click();
-  await nextRound(page);
-  await round(page, 3);
-  await page.getByRole('radio', { name: 'Soft' }).click();
-  await nextRound(page);
-  await round(page, 4);
-  await page.getByRole('radio', { name: 'Layered' }).click();
-  await nextRound(page);
-  await round(page, 5);
-  await page.getByRole('radio', { name: 'Multi-colour' }).click();
-  await nextRound(page);
-  await round(page, 6);
-  await page.getByRole('radio', { name: 'Serif', exact: true }).click();
-  await nextRound(page);
-  await round(page, 7);
-  await page.getByRole('radio', { name: 'Expressive' }).click();
-  await nextRound(page);
-  await round(page, 8);
+  await expect(page).toHaveURL(/#\/fresh\/direction/);
+  await page.getByRole('radio', { name: /Start from the basics/ }).click();
+  await page.getByRole('link', { name: 'Continue' }).click();
+
+  const picks = ['Dark', 'Comfortable', 'Soft', 'Soft shadows', 'Multi-colour', 'Big colour blocks', 'Serif', 'Capitals', 'Dot grid', 'Expressively'];
+  for (const [index, name] of picks.entries()) {
+    await round(page, index + 1);
+    await page.getByRole('radio', { name, exact: true }).click();
+    await nextRound(page);
+  }
+  await round(page, 11);
   await page.getByRole('radio', { name: 'Editorial' }).click();
   await page.getByRole('button', { name: 'Continue' }).click();
 
@@ -77,7 +66,10 @@ test('a full Start fresh run-through reaches Review with every choice saved', as
     radius: 'soft',
     depth: 'layered',
     colorStrategy: 'expressive',
+    colorUse: 'blocks',
     headingStyle: 'serif',
+    headingCase: 'uppercase',
+    texture: 'dots',
     motion: 'expressive',
     layout: 'editorial',
     accent: '#0F6E6E',
@@ -95,17 +87,18 @@ test('This or That works from the keyboard alone', async ({ page }) => {
   await page.goto('./#/fresh/this-or-that');
   await round(page, 1);
   await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('ArrowRight');
   await page.keyboard.press('Enter');
   await round(page, 2);
   await page.keyboard.press('n');
   await page.keyboard.press('Enter');
   await round(page, 3);
-  await page.keyboard.press('ArrowLeft');
+  await page.keyboard.press('4');
   await page.keyboard.press('Enter');
   await round(page, 4);
   const config = await configFromUrl(page);
   expect(config.theme).toBe('dark');
-  expect(config.radius).toBe('sharp');
+  expect(config.radius).toBe('pill');
 });
 
 test('choosing never moves on by itself, and a choice can be changed', async ({ page }) => {
@@ -138,6 +131,22 @@ test('No preference waits for Next too, and can be replaced by a pick', async ({
   await expect(skip).toHaveAttribute('aria-pressed', 'false');
 });
 
+test('a look can be picked, changed and refined', async ({ page }) => {
+  await page.goto('./#/fresh/direction');
+  await page.getByRole('radio', { name: /Terminal/ }).click();
+  await page.getByRole('radio', { name: /Pop Riot/ }).click();
+  await page.waitForTimeout(600);
+  await expect(page).toHaveURL(/\/fresh\/direction/);
+  const riot = await configFromUrl(page);
+  expect(riot).toMatchObject({ direction: 'pop-riot', depth: 'bold', texture: 'dots' });
+
+  await page.getByRole('link', { name: 'Continue' }).click();
+  await round(page, 1);
+  await page.getByRole('button', { name: 'Skip the rest' }).click();
+  await expect(page).toHaveURL(/\/fresh\/colour/);
+  expect(await configFromUrl(page)).toMatchObject({ direction: 'pop-riot', depth: 'bold' });
+});
+
 test('keys typed in a text field are not treated as round choices', async ({ page }) => {
   await page.goto('./#/fresh/avoid');
   await page.getByLabel('Add your own').fill('nnnn');
@@ -147,6 +156,7 @@ test('keys typed in a text field are not treated as round choices', async ({ pag
 test('the demo matches the project type', async ({ page }) => {
   await page.goto('./#/fresh/project');
   await page.getByRole('radio', { name: /Simulator/ }).click();
+  await page.getByRole('link', { name: 'Continue' }).click();
   await page.getByRole('link', { name: 'Continue' }).click();
   await expect(page.getByText('Carbon price, per tonne').first()).toBeVisible();
 });

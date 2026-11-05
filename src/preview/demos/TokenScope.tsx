@@ -12,7 +12,8 @@ export function TokenScope({ config, className = '', children }: { config: Desig
   return (
     <span
       style={style}
-      className={`flex min-h-52 w-full flex-col justify-center gap-(--bb-space-3) overflow-hidden rounded-button bg-bb-background p-4 font-bb-body text-(length:--bb-text-2) leading-(--bb-line-height) text-bb-text ${className}`}
+      data-layout={config.layout}
+      className={`bb-texture flex min-h-52 w-full flex-col justify-center gap-(--bb-space-3) overflow-hidden rounded-button bg-bb-background p-4 font-bb-body text-(length:--bb-text-2) leading-(--bb-line-height) text-bb-text ${className}`}
     >
       {children}
     </span>

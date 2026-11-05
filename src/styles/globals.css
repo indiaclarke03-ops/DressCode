@@ -39,10 +39,12 @@
   --color-bb-text: var(--bb-color-text);
   --color-bb-muted: var(--bb-color-text-muted);
   --color-bb-accent: var(--bb-color-accent);
+  --color-bb-accent-text: var(--bb-color-accent-text);
   --color-bb-on-accent: var(--bb-color-accent-foreground);
   --color-bb-success: var(--bb-color-success);
   --color-bb-warning: var(--bb-color-warning);
   --color-bb-danger: var(--bb-color-danger);
+  --color-bb-card-border: var(--bb-border-color);
   --color-bb-emphasis-1: var(--bb-emphasis-1);
   --color-bb-emphasis-2: var(--bb-emphasis-2);
   --color-bb-emphasis-3: var(--bb-emphasis-3);
@@ -98,6 +100,8 @@
 
 /* Inside a preview frame, for the asymmetrical half of This or That round 8. */
 @custom-variant editorial (&:where([data-layout='editorial'], [data-layout='editorial'] *));
+@custom-variant bento (&:where([data-layout='bento'], [data-layout='bento'] *));
+@custom-variant poster (&:where([data-layout='poster'], [data-layout='poster'] *));
 
 @layer base {
   html {
@@ -122,6 +126,31 @@
   ::selection {
     background: var(--dc-accent);
     color: var(--dc-on-accent);
+  }
+}
+
+@layer components {
+  /* Nav bars, headers and heroes: plain surfaces, or solid colour when chosen. */
+  .bb-band {
+    background: var(--bb-band-background);
+    --bb-color-text: var(--bb-band-text);
+    --bb-color-text-muted: var(--bb-band-muted);
+    --bb-color-accent: var(--bb-band-accent);
+    --bb-color-accent-text: var(--bb-band-accent-text);
+    --bb-color-accent-foreground: var(--bb-band-on-accent);
+    --bb-emphasis-1: var(--bb-band-emphasis);
+    color: var(--bb-band-text);
+  }
+
+  .bb-texture {
+    background-image: var(--bb-texture);
+    background-size: var(--bb-texture-size);
+  }
+
+  .bb-heading {
+    text-transform: var(--bb-heading-transform);
+    letter-spacing: var(--bb-heading-tracking);
+    overflow-wrap: anywhere;
   }
 }
 

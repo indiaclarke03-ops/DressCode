@@ -28,9 +28,9 @@ function Control({ kind, label, value, fill }: { kind: string; label: string; va
       <div className="flex items-center justify-between gap-bb-2 py-bb-1">
         <Muted>{label}</Muted>
         <span className="flex items-center gap-1 rounded-bb-control border border-bb-border px-bb-2 py-0.5 font-bb-mono text-bb-1 text-bb-text">
-          {kind === 'steppers' ? <span className="text-bb-accent">−</span> : null}
+          {kind === 'steppers' ? <span className="text-bb-accent-text">−</span> : null}
           {value}
-          {kind === 'steppers' ? <span className="text-bb-accent">+</span> : null}
+          {kind === 'steppers' ? <span className="text-bb-accent-text">+</span> : null}
         </span>
       </div>
     );
@@ -93,7 +93,7 @@ export default function SimulatorScene({ config }: SceneProps) {
       {showNumber ? (
         <>
           <Muted>{isCalculator ? 'Estimated yearly saving' : 'Emissions cut by 2040'}</Muted>
-          <p className="m-0 font-bb-mono text-bb-7 leading-tight text-bb-accent tabular-nums">
+          <p className="m-0 font-bb-mono text-bb-7 leading-tight text-bb-accent-text tabular-nums">
             {isCalculator ? '£685' : '46%'}
           </p>
           <Muted>
@@ -121,7 +121,7 @@ export default function SimulatorScene({ config }: SceneProps) {
 
   return (
     <div className="flex flex-col gap-bb-4 p-bb-4">
-      <header>
+      <header className="bb-band -mx-bb-4 -mt-bb-4 p-bb-4">
         <Muted>{brand}</Muted>
         <Title>{topic}</Title>
       </header>

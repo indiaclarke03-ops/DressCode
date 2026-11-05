@@ -4,6 +4,13 @@ import { BEFORE_YOU_FINISH, doNotLines, styleTitle } from './shared';
 
 const MAX_DO_NOT_LINES = 12;
 
+const DEPTH_LINE = {
+  flat: 'no shadows, 1px borders',
+  layered: 'soft shadows, no card borders',
+  bold: 'thick outlines, hard offset shadows',
+  borderless: 'no borders or shadows, tone only',
+};
+
 export function claudeMdSnippet(config: DesignConfig, tokens: DesignTokens): string {
   const { colors, fonts, type, spacing, radius, depth } = tokens;
   const doNot = doNotLines(config);
@@ -19,7 +26,7 @@ export function claudeMdSnippet(config: DesignConfig, tokens: DesignTokens): str
     `- Type: ${type.baseSize}px base, scale ${type.sizes.join(' / ')}`,
     `- Spacing: ${spacing.join(', ')}`,
     `- Radius: ${radius.control}px controls, ${radius.card}px cards`,
-    `- Depth: ${depth.strategy === 'flat' ? 'no shadows, 1px borders' : 'soft shadows, no card borders'}`,
+    `- Depth: ${DEPTH_LINE[depth.strategy]}`,
     '',
     ...(shown.length ? ['### Do not', ...shown.map((line) => `- ${line}`)] : []),
     ...(hidden > 0 ? [`- Plus ${hidden} more in DESIGN.md`] : []),
