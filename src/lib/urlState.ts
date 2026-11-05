@@ -32,3 +32,9 @@ export function decodeConfig(encoded: string): DesignConfig | null {
     return null;
   }
 }
+
+/** A full link that opens this config on the review step. */
+export function shareUrl(config: DesignConfig): string {
+  const { origin, pathname } = window.location;
+  return `${origin}${pathname}#/review?${CONFIG_PARAM}=${encodeConfig(config)}`;
+}

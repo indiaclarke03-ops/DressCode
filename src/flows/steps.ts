@@ -9,7 +9,7 @@ export interface FlowStep {
   /** Build phase that delivers this step. Remove once every step is live. */
   phase: number;
   /** Where the live preview shows on this step, if at all. */
-  preview?: 'side' | 'full';
+  preview?: 'side';
   /** The step moves on from its own button, so the flow hides Continue. */
   ownsNext?: boolean;
 }
@@ -68,9 +68,8 @@ const designSteps: FlowStep[] = [
     id: 'review',
     label: 'Review',
     title: 'Review and export',
-    description: 'Your brief, ready to copy or download.',
+    description: 'Your brief, ready to hand to your agent.',
     phase: 5,
-    preview: 'full',
   },
 ];
 

@@ -38,7 +38,7 @@ function ToolButton({ label, pressed, onClick, children }: { label: string; pres
   );
 }
 
-function useFitToWidth(width: number) {
+function useFitToWidth(width: number, isDesktop: boolean) {
   const port = useRef<HTMLDivElement>(null);
   const page = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ portWidth: width, portHeight: 0, pageHeight: 0 });
@@ -57,8 +57,10 @@ function useFitToWidth(width: number) {
     return () => observer.disconnect();
   }, [width]);
 
-  const scale = Math.min(1, size.portWidth / width);
-  return { port, page, scale, ...size };
+  // Never narrower than the device, but a roomy panel gets a roomier page.
+  const pageWidth = isDesktop ? Math.max(width, size.portWidth) : width;
+  const scale = Math.min(1, size.portWidth / pageWidth);
+  return { port, page, scale, pageWidth, ...size };
 }
 
 export function PreviewFrame({ defaultDevice = 'desktop' }: { defaultDevice?: PreviewDevice }) {
@@ -68,7 +70,10 @@ export function PreviewFrame({ defaultDevice = 'desktop' }: { defaultDevice?: Pr
   usePairingFonts([config.fontPairingId]);
 
   const width = DEVICE_WIDTH[device];
-  const { port, page, scale, portWidth, portHeight, pageHeight } = useFitToWidth(width);
+  const { port, page, scale, pageWidth, portHeight, pageHeight } = useFitToWidth(
+    width,
+    device === 'desktop',
+  );
   useRevealMotion(page, tokens.motion, replay);
 
   // Variables update in place, so a change never re-mounts the scene.
@@ -102,7 +107,7 @@ export function PreviewFrame({ defaultDevice = 'desktop' }: { defaultDevice?: Pr
         aria-label="Live preview of your style. Scroll to see more."
         className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto rounded-card border border-line bg-background"
       >
-        <div style={{ height: pageHeight * scale, width: width * scale, margin: '0 auto' }}>
+        <div style={{ height: pageHeight * scale, width: pageWidth * scale, margin: '0 auto' }}>
           <div
             {...INERT}
             ref={page}
@@ -111,10 +116,9 @@ export function PreviewFrame({ defaultDevice = 'desktop' }: { defaultDevice?: Pr
             className="@container grid origin-top-left bg-bb-background font-bb-body text-bb-2 leading-(--bb-line-height) text-bb-text"
             style={{
               ...style,
-              width,
+              width: pageWidth,
               minHeight: scale > 0 ? portHeight / scale : portHeight,
               transform: `scale(${scale})`,
-              maxWidth: portWidth / scale,
             }}
           >
             <Suspense fallback={null}>

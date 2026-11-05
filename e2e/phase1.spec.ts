@@ -10,6 +10,8 @@ const ROUTES = [
   { name: 'step-details', path: './#/fresh/details' },
   { name: 'step-avoid', path: './#/fresh/avoid' },
   { name: 'restyle-step', path: './#/restyle/current' },
+  { name: 'step-review', path: './#/fresh/review' },
+  { name: 'styles', path: './#/styles' },
   { name: 'tweaks', path: './#/tweaks' },
   { name: 'kit', path: './#/kit' },
 ];

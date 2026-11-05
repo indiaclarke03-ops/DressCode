@@ -8,6 +8,7 @@ import { useConfig } from './ConfigContext';
 const FlowLayout = lazy(() => import('@/flows/FlowLayout'));
 const Examples = lazy(() => import('@/pages/Examples'));
 const Tweaks = lazy(() => import('@/pages/Tweaks'));
+const Styles = lazy(() => import('@/pages/Styles'));
 const Kit = lazy(() => import('@/pages/Kit'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 
@@ -28,6 +29,7 @@ export function AppRoutes() {
         <Route path="restyle" element={<Navigate to={firstStepPath('restyle')} replace />} />
         <Route path="restyle/:stepId" element={<FlowLayout mode="restyle" />} />
         <Route path="review" element={<ShareLink />} />
+        <Route path="styles" element={<Styles />} />
         <Route path="tweaks" element={<Tweaks />} />
         <Route path="examples" element={<Examples />} />
         <Route path="kit" element={<Kit />} />

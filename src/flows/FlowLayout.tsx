@@ -10,14 +10,12 @@ import { AvoidList } from './shared/AvoidList';
 import { Colour } from './shared/Colour';
 import { ProjectDetails } from './shared/ProjectDetails';
 import { ProjectType } from './shared/ProjectType';
+import { Review } from './shared/Review';
 import { ThisOrThat } from './shared/ThisOrThat';
 import { Typography } from './shared/Typography';
 import { FLOWS, firstStepPath, stepPath, type FlowMode } from './steps';
 
 const PreviewPanel = lazy(() => import('@/preview/PreviewPanel'));
-const PreviewFrame = lazy(() =>
-  import('@/preview/PreviewFrame').then((module) => ({ default: module.PreviewFrame })),
-);
 
 const STEP_TRANSITION = { duration: 0.2, ease: 'easeOut' } as const;
 
@@ -29,6 +27,7 @@ const STEP_BODIES: Record<string, ComponentType<{ onDone: () => void }>> = {
   typography: Typography,
   details: ProjectDetails,
   avoid: AvoidList,
+  review: Review,
 };
 
 export default function FlowLayout({ mode }: { mode: FlowMode }) {
@@ -85,14 +84,6 @@ export default function FlowLayout({ mode }: { mode: FlowMode }) {
               {Body ? (
                 <div className="mt-8 @container">
                   <Body onDone={goNext} />
-                </div>
-              ) : null}
-
-              {step.preview === 'full' ? (
-                <div className="mt-8 h-(--dc-preview-height)">
-                  <Suspense fallback={null}>
-                    <PreviewFrame />
-                  </Suspense>
                 </div>
               ) : null}
 

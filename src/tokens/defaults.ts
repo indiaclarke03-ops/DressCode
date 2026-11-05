@@ -18,20 +18,20 @@ export const ACCENT_SWATCHES = [
 export const DEFAULT_ACCENT = ACCENT_SWATCHES[0].hex;
 
 export const AVOID_ITEMS = [
-  { id: 'gradients', label: 'Purple-to-blue or rainbow gradients' },
-  { id: 'emoji-icons', label: 'Emoji used as icons' },
-  { id: 'three-cards', label: 'Three identical feature cards in a row' },
-  { id: 'centre-aligned', label: 'Everything centre-aligned' },
-  { id: 'glassmorphism', label: 'Glassmorphism / heavy blur' },
-  { id: 'oversized-radius', label: 'Oversized border radius on everything' },
-  { id: 'stock-heroes', label: 'Generic stock-style hero illustrations' },
-  { id: 'shadows-everywhere', label: 'Drop shadows on every element' },
-  { id: 'placeholder-copy', label: 'Placeholder copy ("Lorem ipsum", "Welcome to our platform")' },
-  { id: 'font-sprawl', label: 'Too many font weights and sizes' },
-  { id: 'grey-on-grey', label: 'Low-contrast grey text on grey backgrounds' },
-  { id: 'load-animations', label: 'Decorative animations on load' },
-  { id: 'rainbow-charts', label: 'Rainbow chart palettes / default library chart colours' },
-  { id: 'loud-basemaps', label: 'Maps with full-colour default basemaps that compete with the data' },
+  { id: 'gradients', label: 'Purple-to-blue or rainbow gradients', rule: 'Use purple-to-blue or rainbow gradients' },
+  { id: 'emoji-icons', label: 'Emoji used as icons', rule: 'Use emoji as icons (use a line icon set such as lucide-react)' },
+  { id: 'three-cards', label: 'Three identical feature cards in a row', rule: 'Line up three identical feature cards in a row' },
+  { id: 'centre-aligned', label: 'Everything centre-aligned', rule: 'Centre-align everything; left-align by default' },
+  { id: 'glassmorphism', label: 'Glassmorphism / heavy blur', rule: 'Use glassmorphism or heavy blur' },
+  { id: 'oversized-radius', label: 'Oversized border radius on everything', rule: 'Put an oversized border radius on everything' },
+  { id: 'stock-heroes', label: 'Generic stock-style hero illustrations', rule: 'Use generic stock-style hero illustrations' },
+  { id: 'shadows-everywhere', label: 'Drop shadows on every element', rule: 'Put drop shadows on every element' },
+  { id: 'placeholder-copy', label: 'Placeholder copy ("Lorem ipsum", "Welcome to our platform")', rule: 'Use placeholder copy such as "Lorem ipsum" or "Welcome to our platform"' },
+  { id: 'font-sprawl', label: 'Too many font weights and sizes', rule: 'Add font weights or sizes beyond the type scale' },
+  { id: 'grey-on-grey', label: 'Low-contrast grey text on grey backgrounds', rule: 'Set low-contrast grey text on grey backgrounds' },
+  { id: 'load-animations', label: 'Decorative animations on load', rule: 'Add decorative animations on load' },
+  { id: 'rainbow-charts', label: 'Rainbow chart palettes / default library chart colours', rule: 'Use rainbow chart palettes or a library\'s default chart colours' },
+  { id: 'loud-basemaps', label: 'Maps with full-colour default basemaps that compete with the data', rule: 'Use full-colour default basemaps that compete with the data' },
 ] as const;
 
 export const KEEP_ITEMS = [

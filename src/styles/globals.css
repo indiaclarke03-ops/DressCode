@@ -14,6 +14,10 @@
   --color-accent-hover: var(--dc-accent-hover);
   --color-on-accent: var(--dc-on-accent);
   --color-transparent: transparent;
+  --color-code-heading: var(--dc-code-heading);
+  --color-code-hex: var(--dc-code-hex);
+  --color-code-name: var(--dc-code-name);
+  --color-code-comment: var(--dc-code-comment);
 
   --color-generic-from: var(--demo-generic-from);
   --color-generic-to: var(--demo-generic-to);

@@ -15,6 +15,10 @@
   --dc-accent-hover: #a8461f;
   --dc-preview-height: calc(100dvh - 3rem);
   --dc-preview-width: 34rem;
+  --dc-code-heading: #1a1915;
+  --dc-code-hex: #b0491f;
+  --dc-code-name: #2f6b52;
+  --dc-code-comment: #6e6a60;
   --dc-shadow-selected: 0 6px 20px -8px rgb(26 25 21 / 0.22);
 }
 
@@ -30,6 +34,10 @@
   --dc-accent-text: #e07a52;
   --dc-on-accent: #141413;
   --dc-accent-hover: #ea8f6b;
+  --dc-code-heading: #edebe5;
+  --dc-code-hex: #e07a52;
+  --dc-code-name: #8fc7ae;
+  --dc-code-comment: #9c988e;
   --dc-shadow-selected: 0 6px 20px -8px rgb(0 0 0 / 0.7);
 }
 

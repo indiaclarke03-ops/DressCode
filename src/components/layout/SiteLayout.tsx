@@ -32,6 +32,12 @@ export function SiteLayout() {
           </Link>
           <nav aria-label="Main" className="flex items-center gap-2">
             <Link
+              to="/styles"
+              className="rounded-button px-2 py-2 text-sm text-muted transition-colors duration-150 hover:text-ink"
+            >
+              My styles
+            </Link>
+            <Link
               to="/examples"
               className="rounded-button px-2 py-2 text-sm text-muted transition-colors duration-150 hover:text-ink"
             >
