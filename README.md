@@ -1,6 +1,6 @@
 # Dress Code
 
-Give your AI agent a dress code. Dress Code turns visual choices into a precise design brief for Claude Code or any AI coding agent: real hex codes, fonts, spacing and a list of things to avoid.
+Give your AI agent a dress code. New to building, or vibe coding your way through it? You don't need to read code to take control of how your project looks. Pick what you like and Dress Code turns your choices into a clear design brief for Claude Code or any AI coding agent, so you end up with something different from the usual AI-made look.
 
 **Live:** https://indiaclarke03-ops.github.io/DressCode/
 

@@ -20,17 +20,21 @@ export function Landing() {
           <h1 className="m-0 font-display text-display font-normal text-balance text-ink">
             Give your AI agent a dress code.
           </h1>
-          <p className="mt-6 mb-0 max-w-reading text-lg/7 text-muted">
-            Pick the look you want, and Dress Code turns your choices into a precise brief for
-            Claude Code or any AI coding agent: real hex codes, fonts, spacing and a list of things
-            to avoid.
+          <p className="mt-6 mb-0 max-w-reading text-xl/8 text-pretty text-ink">
+            New to building, or vibe coding your way through it? You don't need to read code to take
+            control of how your project looks.
+          </p>
+          <p className="mt-4 mb-0 max-w-reading text-lg/7 text-pretty text-muted">
+            Left alone, Claude Code and other AI agents tend to make the same generic designs. Pick
+            what you like here and Dress Code turns your choices into a clear brief your agent can
+            follow, so you end up with something that looks like yours.
           </p>
           <Button onClick={goToModes} className="mt-8">
             Choose a starting point
             <ArrowDown aria-hidden size={16} />
           </Button>
         </div>
-        <div className="lg:col-span-6">
+        <div className="lg:col-span-6 lg:self-center">
           <BeforeAfter />
         </div>
       </section>

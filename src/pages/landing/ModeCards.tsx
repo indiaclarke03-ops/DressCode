@@ -50,7 +50,7 @@ export function ModeCards() {
       <ModeCard
         to="/restyle"
         title="Restyle existing"
-        description="Your v1 works but you dislike how it looks. Change the look, not what it does."
+        description="Your project works but you dislike how it looks. Change the look, not what it does."
         output="DESIGN.md, RESTYLE.md"
         illustration={<RestyleIllustration />}
         className="lg:col-span-5"

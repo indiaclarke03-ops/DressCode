@@ -10,8 +10,9 @@ export function Logo() {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M12 8V6.5a2 2 0 1 0-2-2" />
-      <path d="m12 8 9 6.5a1.4 1.4 0 0 1-.8 2.5H3.8a1.4 1.4 0 0 1-.8-2.5z" />
+      <path d="M10 10.5 3.6 6.6A1 1 0 0 0 2 7.4v9.2a1 1 0 0 0 1.6.8l6.4-3.9" />
+      <path d="m14 10.5 6.4-3.9a1 1 0 0 1 1.6.8v9.2a1 1 0 0 1-1.6.8L14 13.5" />
+      <rect x="10" y="9.75" width="4" height="4.5" rx="1" />
     </svg>
   );
 }
