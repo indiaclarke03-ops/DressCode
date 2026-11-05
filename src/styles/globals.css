@@ -27,6 +27,25 @@
   --color-brief-accent: var(--demo-brief-accent);
   --color-brief-accent-soft: var(--demo-brief-accent-soft);
 
+  /* The scoped preview tokens, set per frame by TokenScope. */
+  --color-bb-background: var(--bb-color-background);
+  --color-bb-surface: var(--bb-color-surface);
+  --color-bb-raised: var(--bb-color-surface-raised);
+  --color-bb-border: var(--bb-color-border);
+  --color-bb-text: var(--bb-color-text);
+  --color-bb-muted: var(--bb-color-text-muted);
+  --color-bb-accent: var(--bb-color-accent);
+  --color-bb-on-accent: var(--bb-color-accent-foreground);
+  --color-bb-emphasis-1: var(--bb-emphasis-1);
+  --color-bb-emphasis-2: var(--bb-emphasis-2);
+  --color-bb-emphasis-3: var(--bb-emphasis-3);
+  --radius-bb-card: var(--bb-radius-card);
+  --radius-bb-control: var(--bb-radius-control);
+  --shadow-bb-card: var(--bb-shadow-card);
+  --font-bb-heading: var(--bb-font-heading);
+  --font-bb-body: var(--bb-font-body);
+  --font-bb-mono: var(--bb-font-mono);
+
   --font-display: 'Instrument Serif', Georgia, serif;
   --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;

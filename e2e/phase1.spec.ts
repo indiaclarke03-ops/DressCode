@@ -3,7 +3,12 @@ import { expect, test, type Page } from '@playwright/test';
 
 const ROUTES = [
   { name: 'landing', path: './' },
-  { name: 'fresh-step', path: './#/fresh/colour' },
+  { name: 'step-project', path: './#/fresh/project' },
+  { name: 'step-this-or-that', path: './#/fresh/this-or-that' },
+  { name: 'step-colour', path: './#/fresh/colour' },
+  { name: 'step-typography', path: './#/fresh/typography' },
+  { name: 'step-details', path: './#/fresh/details' },
+  { name: 'step-avoid', path: './#/fresh/avoid' },
   { name: 'restyle-step', path: './#/restyle/current' },
   { name: 'tweaks', path: './#/tweaks' },
   { name: 'kit', path: './#/kit' },
@@ -14,6 +19,8 @@ async function open(page: Page, path: string, theme: 'light' | 'dark') {
   await page.goto(path);
   await expect(page.locator('main h1').first()).toBeVisible();
   await page.evaluate(() => document.fonts.ready);
+  // Let the 200ms step fade finish, so contrast is measured at full opacity.
+  await page.waitForTimeout(300);
 }
 
 for (const width of [1440, 390]) {

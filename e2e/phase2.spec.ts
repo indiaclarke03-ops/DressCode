@@ -7,7 +7,7 @@ const configInUrl = (page: import('@playwright/test').Page) =>
 test('a choice reaches the URL and survives a refresh', async ({ page }) => {
   await page.goto('./#/kit');
   await page.getByRole('radio', { name: 'Dark' }).click();
-  await page.getByRole('button', { name: 'Accent: Oxblood' }).click();
+  await page.getByRole('radio', { name: 'Oxblood' }).click();
   await expect.poll(() => configInUrl(page)).toBeTruthy();
   await expect.poll(() => page.url()).toMatch(/c=/);
   await page.waitForTimeout(400);
@@ -20,7 +20,7 @@ test('a choice reaches the URL and survives a refresh', async ({ page }) => {
 test('a share link opens in a fresh browser with the exact config', async ({ page, browser }) => {
   await page.goto('./#/kit');
   await page.getByRole('radio', { name: 'Cool' }).click();
-  await page.getByRole('button', { name: 'Accent: Teal' }).click();
+  await page.getByRole('radio', { name: 'Teal' }).click();
   await page.waitForTimeout(400);
   const encoded = configInUrl(page);
 
@@ -43,7 +43,7 @@ test('#/review share links land on the review step of the saved mode', async ({ 
 
 test('the config survives moving between steps', async ({ page }) => {
   await page.goto('./#/kit');
-  await page.getByRole('button', { name: 'Accent: Moss' }).click();
+  await page.getByRole('radio', { name: 'Moss' }).click();
   await page.locator('header').getByRole('link', { name: 'Dress Code' }).click();
   await page.getByRole('link', { name: /Start fresh/ }).click();
   await page.getByRole('link', { name: 'Continue' }).click();
@@ -63,7 +63,7 @@ test('a corrupt share link falls back to defaults instead of crashing', async ({
 test('Fix contrast clears every failing pair', async ({ page }) => {
   await page.goto('./#/kit');
   await page.getByRole('radio', { name: 'Dark' }).click();
-  await page.getByRole('button', { name: 'Accent: Ink blue' }).click();
+  await page.getByRole('radio', { name: 'Ink blue' }).click();
   await page.getByRole('button', { name: /Fix contrast/ }).click();
   await expect(page.getByRole('button', { name: 'All pairs pass' })).toBeDisabled();
   await expect(page.getByText(/ fail$/)).toHaveCount(0);

@@ -1,18 +1,35 @@
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { domAnimation, LazyMotion, m, MotionConfig } from 'framer-motion';
-import { useEffect } from 'react';
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { useCallback, useEffect, type ComponentType } from 'react';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useConfig } from '@/app/ConfigContext';
 import { Button } from '@/components/ui/Button';
 import { Stepper } from '@/components/ui/Stepper';
 import { PagePlaceholder } from '@/pages/PagePlaceholder';
+import { AvoidList } from './shared/AvoidList';
+import { Colour } from './shared/Colour';
+import { ProjectDetails } from './shared/ProjectDetails';
+import { ProjectType } from './shared/ProjectType';
+import { ThisOrThat } from './shared/ThisOrThat';
+import { Typography } from './shared/Typography';
 import { FLOWS, firstStepPath, stepPath, type FlowMode } from './steps';
 
 const STEP_TRANSITION = { duration: 0.2, ease: 'easeOut' } as const;
 
+/** Steps without an entry here show their phase placeholder. */
+const STEP_BODIES: Record<string, ComponentType<{ onDone: () => void }>> = {
+  project: ProjectType,
+  'this-or-that': ThisOrThat,
+  colour: Colour,
+  typography: Typography,
+  details: ProjectDetails,
+  avoid: AvoidList,
+};
+
 export default function FlowLayout({ mode }: { mode: FlowMode }) {
   const { stepId } = useParams();
   const { dispatch } = useConfig();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch({ type: 'setMode', mode });
@@ -22,10 +39,15 @@ export default function FlowLayout({ mode }: { mode: FlowMode }) {
   const index = steps.findIndex((step) => step.id === stepId);
   const step = steps[index];
 
-  if (!step) return <Navigate to={firstStepPath(mode)} replace />;
-
   const previous = steps[index - 1];
   const next = steps[index + 1];
+  const goNext = useCallback(() => {
+    if (next) navigate(stepPath(mode, next.id));
+  }, [mode, navigate, next]);
+
+  if (!step) return <Navigate to={firstStepPath(mode)} replace />;
+
+  const Body = STEP_BODIES[step.id];
 
   return (
     <LazyMotion features={domAnimation}>
@@ -49,9 +71,15 @@ export default function FlowLayout({ mode }: { mode: FlowMode }) {
             </h1>
             <p className="mt-3 mb-0 max-w-reading text-muted">{step.description}</p>
 
-            <PagePlaceholder phase={step.phase} />
+            {Body ? (
+              <div className="mt-8">
+                <Body onDone={goNext} />
+              </div>
+            ) : (
+              <PagePlaceholder phase={step.phase} />
+            )}
 
-            <div className="mt-8 flex items-center justify-between">
+            <div className="mt-10 flex items-center justify-between border-t border-line pt-6">
               {previous ? (
                 <Button asChild variant="ghost" className="-ml-4">
                   <Link to={stepPath(mode, previous.id)}>

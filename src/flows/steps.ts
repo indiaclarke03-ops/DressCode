@@ -30,7 +30,7 @@ const designSteps: FlowStep[] = [
     id: 'colour',
     label: 'Colour',
     title: 'Choose your colour',
-    description: 'One accent and a neutral temperature. The full palette follows from them.',
+    description: 'Pick one main colour and a background tone. The full palette follows from them.',
     phase: 3,
   },
   {

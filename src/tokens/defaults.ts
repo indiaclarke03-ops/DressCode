@@ -120,3 +120,31 @@ export function createDefaultConfig(
     ...(mode === 'restyle' ? { restyle: createRestyleConfig() } : {}),
   };
 }
+
+/** The scene family a project type previews as. */
+export type SceneFamily =
+  | 'dashboard' | 'simulator' | 'map' | 'app' | 'chat' | 'marketing' | 'editorial' | 'docs';
+
+export const SCENE_FOR_PROJECT: Record<ProjectType, SceneFamily> = {
+  dashboard: 'dashboard',
+  internal: 'dashboard',
+  simulator: 'simulator',
+  calculator: 'simulator',
+  map: 'map',
+  app: 'app',
+  mobile: 'app',
+  form: 'app',
+  other: 'app',
+  chat: 'chat',
+  marketing: 'marketing',
+  event: 'marketing',
+  ecommerce: 'marketing',
+  presentation: 'marketing',
+  game: 'marketing',
+  editorial: 'editorial',
+  datastory: 'editorial',
+  report: 'editorial',
+  explainer: 'editorial',
+  docs: 'docs',
+  portfolio: 'docs',
+};

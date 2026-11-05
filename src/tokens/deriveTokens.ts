@@ -25,7 +25,7 @@ const RADIUS = {
   soft: { control: 12, card: 16 },
 };
 
-const TYPE_RATIO = { tight: 1.125, balanced: 1.2, dramatic: 1.333 };
+export const TYPE_RATIO = { tight: 1.125, balanced: 1.2, dramatic: 1.333 };
 /** Scale steps: one below body, body, then five above. */
 const TYPE_STEPS = [-1, 0, 1, 2, 3, 4, 5];
 const MIN_TYPE_SIZE = 12;
@@ -51,17 +51,21 @@ const SHADOW_ALPHA = {
   dark: { soft: '66', wide: '4D' },
 };
 
+const EMPHASIS_COUNT = 3;
+
 export interface DesignTokens {
   theme: DesignConfig['theme'];
   colors: Palette;
   data: DataPalette;
+  /** Colours for highlights: one accent and quiet tones, or several hues. */
+  emphasis: string[];
   /** Whether the brief should spell the data palettes out. */
   includeDataPalette: boolean;
   fonts: { pairingName: string; heading: FontRole; body: FontRole; mono: FontRole };
   type: { ratio: number; baseSize: number; lineHeight: number; sizes: number[] };
   spacing: number[];
   radius: { control: number; card: number };
-  depth: { strategy: DesignConfig['depth']; card: string; raised: string };
+  depth: { strategy: DesignConfig['depth']; card: string; raised: string; borderWidth: number };
   motion: { durationMs: number; easing: string; staggerMs: number; spring: boolean };
   layout: {
     kind: DesignConfig['layout'];
@@ -99,10 +103,16 @@ export function deriveTokens(config: DesignConfig): DesignTokens {
   const pairing = getPairing(config.fontPairingId);
   const ratio = TYPE_RATIO[config.typeScale];
 
+  const data = generateDataPalette(config.accent, colors, config.theme, config.colorStrategy);
+
   return {
     theme: config.theme,
     colors,
-    data: generateDataPalette(config.accent, colors, config.theme, config.colorStrategy),
+    data,
+    emphasis:
+      config.colorStrategy === 'expressive'
+        ? data.categorical.slice(0, EMPHASIS_COUNT)
+        : [colors.accent, colors.textMuted, colors.border],
     includeDataPalette: needsDataPalette(config),
     fonts: {
       pairingName: pairing.name,
@@ -118,7 +128,11 @@ export function deriveTokens(config: DesignConfig): DesignTokens {
     },
     spacing: density.spacing,
     radius: RADIUS[config.radius],
-    depth: { strategy: config.depth, ...shadows(config.depth, config.theme) },
+    depth: {
+      strategy: config.depth,
+      ...shadows(config.depth, config.theme),
+      borderWidth: config.depth === 'flat' ? 1 : 0,
+    },
     motion: MOTION[config.motion],
     layout: {
       kind: config.layout,

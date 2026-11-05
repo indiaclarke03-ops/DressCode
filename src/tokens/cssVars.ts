@@ -11,9 +11,10 @@ function numbered(prefix: string, values: (string | number)[]): [string, string]
 
 /** Flat `--bb-*` variables for the preview frame and tokens.css. */
 export function toCssVars(tokens: DesignTokens): Record<string, string> {
-  const { colors, data, fonts, type, spacing, radius, depth, motion, layout } = tokens;
+  const { colors, data, emphasis, fonts, type, spacing, radius, depth, motion, layout } = tokens;
   return Object.fromEntries([
     ...Object.entries(colors).map(([role, value]) => [`--bb-color-${kebab(role)}`, value]),
+    ...numbered('emphasis', emphasis),
     ...numbered('data', data.categorical),
     ...numbered('sequential', data.sequential),
     ...numbered('diverging', data.diverging),
@@ -27,6 +28,7 @@ export function toCssVars(tokens: DesignTokens): Record<string, string> {
     ...numbered('space', spacing.map(px)),
     ['--bb-radius-control', px(radius.control)],
     ['--bb-radius-card', px(radius.card)],
+    ['--bb-border-width', px(depth.borderWidth)],
     ['--bb-shadow-card', depth.card],
     ['--bb-shadow-raised', depth.raised],
     ['--bb-duration', `${motion.durationMs}ms`],
