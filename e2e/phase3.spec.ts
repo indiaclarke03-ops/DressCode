@@ -190,3 +190,14 @@ test('Restyle reuses the shared steps', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Choose your colour' })).toBeVisible();
   await expect(page.getByRole('radio', { name: 'Teal' })).toBeVisible();
 });
+
+test('a slow connection cannot strand the first step behind a redirect', async ({ page }) => {
+  await page.route('**/assets/FlowLayout-*.js', async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 900));
+    await route.continue();
+  });
+  await page.goto('./');
+  await page.getByRole('link', { name: /Start fresh/ }).click();
+  await expect(page.getByRole('radio', { name: /Data dashboard/ })).toBeVisible();
+  await expect(page).toHaveURL(/#\/fresh\/project/);
+});

@@ -23,8 +23,9 @@ interface ConfigContextValue {
 
 const ConfigContext = createContext<ConfigContextValue | null>(null);
 
-/** Only pages that edit a config carry it in the URL. */
-const CONFIG_PAGES = /^\/(fresh|restyle|review|kit)(\/|$)/;
+/** Only pages that edit a config carry it in the URL. Redirect routes must not: a write
+ * while the next page loads would overwrite the redirect and strand the visitor. */
+const CONFIG_PAGES = /^\/((fresh|restyle)\/[^/]+|kit)$/;
 
 /** Browsers rate-limit history writes, so wait for a pause in editing. */
 const URL_WRITE_DELAY_MS = 250;
