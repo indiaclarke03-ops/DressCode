@@ -13,6 +13,8 @@
   --dc-accent-text: #b0491f;
   --dc-on-accent: #ffffff;
   --dc-accent-hover: #a8461f;
+  --dc-preview-height: calc(100dvh - 3rem);
+  --dc-preview-width: 34rem;
   --dc-shadow-selected: 0 6px 20px -8px rgb(26 25 21 / 0.22);
 }
 

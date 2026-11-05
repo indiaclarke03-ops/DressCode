@@ -124,7 +124,7 @@ export function ThisOrThat({ onDone }: { onDone: () => void }) {
         label={round.title}
         value={answer === NO_PREFERENCE ? '' : (answer ?? '')}
         onValueChange={pick}
-        className="grid gap-4 md:grid-cols-2"
+        className="grid gap-4 @xl:grid-cols-2"
       >
         <RoundOptionCard round={round} option={round.a} config={config} />
         <RoundOptionCard round={round} option={round.b} config={config} />

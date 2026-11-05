@@ -16,7 +16,7 @@ export function ProjectDetails() {
             onValueChange={(value) =>
               dispatch({ type: 'setProjectOption', key: question.id, value })
             }
-            className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
+            className="grid gap-3 @md:grid-cols-2 @2xl:grid-cols-3"
           >
             {question.options.map((option) => (
               <ChoiceCard key={option.id} value={option.id} title={option.label} />

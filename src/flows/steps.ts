@@ -8,6 +8,8 @@ export interface FlowStep {
   description: string;
   /** Build phase that delivers this step. Remove once every step is live. */
   phase: number;
+  /** Where the live preview shows on this step, if at all. */
+  preview?: 'side' | 'full';
   /** The step moves on from its own button, so the flow hides Continue. */
   ownsNext?: boolean;
 }
@@ -27,6 +29,7 @@ const designSteps: FlowStep[] = [
     title: 'This or that',
     description: "Eight quick rounds. Pick the one you prefer, then move on when you're sure.",
     phase: 3,
+    preview: 'side',
     ownsNext: true,
   },
   {
@@ -35,6 +38,7 @@ const designSteps: FlowStep[] = [
     title: 'Choose your colour',
     description: 'Pick one main colour and a background tone. The full palette follows from them.',
     phase: 3,
+    preview: 'side',
   },
   {
     id: 'typography',
@@ -42,6 +46,7 @@ const designSteps: FlowStep[] = [
     title: 'Choose your typography',
     description: 'Each pairing is set in real fonts, so you can judge it as it will appear.',
     phase: 3,
+    preview: 'side',
   },
   {
     id: 'details',
@@ -49,6 +54,7 @@ const designSteps: FlowStep[] = [
     title: 'A few project details',
     description: 'Only the questions that matter for what you are building.',
     phase: 3,
+    preview: 'side',
   },
   {
     id: 'avoid',
@@ -56,6 +62,7 @@ const designSteps: FlowStep[] = [
     title: 'What should your agent avoid?',
     description: 'The usual signs of AI-generated UI. All on by default, and yours to change.',
     phase: 3,
+    preview: 'side',
   },
   {
     id: 'review',
@@ -63,6 +70,7 @@ const designSteps: FlowStep[] = [
     title: 'Review and export',
     description: 'Your brief, ready to copy or download.',
     phase: 5,
+    preview: 'full',
   },
 ];
 

@@ -41,7 +41,7 @@ export function Colour() {
   const { config, tokens, dispatch } = useConfig();
 
   return (
-    <div className="grid gap-10 lg:grid-cols-2">
+    <div className="grid gap-10 @3xl:grid-cols-2">
       <div className="flex flex-col gap-8">
         <section>
           <h2 className={SECTION_HEADING}>Main colour</h2>

@@ -7,6 +7,8 @@ import { ThemeToggle } from './ThemeToggle';
 export function SiteLayout() {
   const { pathname } = useLocation();
   const main = useRef<HTMLElement>(null);
+  // The flows run wider, to fit the preview. The header and footer line up with them.
+  const width = /^\/(fresh|restyle)(\/|$)/.test(pathname) ? 'max-w-flow' : 'max-w-page';
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -23,7 +25,7 @@ export function SiteLayout() {
       </button>
 
       <header className="border-b border-line">
-        <div className="mx-auto flex h-16 max-w-page items-center justify-between px-4 md:px-8">
+        <div className={`mx-auto flex h-16 ${width} items-center justify-between px-4 md:px-8`}>
           <Link to="/" className="-ml-1 flex items-center gap-2 rounded-button p-1">
             <Logo />
             <span className="font-display text-2xl leading-none text-ink">Dress Code</span>
@@ -45,7 +47,7 @@ export function SiteLayout() {
       </main>
 
       <footer className="border-t border-line">
-        <div className="mx-auto flex max-w-page flex-col gap-2 px-4 py-8 text-sm text-muted md:flex-row md:items-center md:justify-between md:px-8">
+        <div className={`mx-auto flex ${width} flex-col gap-2 px-4 py-8 text-sm text-muted md:flex-row md:items-center md:justify-between md:px-8`}>
           <p className="m-0 flex gap-4">
             <span className="text-ink">Dress Code</span>
             <a href={REPO_URL} className="underline underline-offset-4 hover:text-ink">

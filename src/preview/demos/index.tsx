@@ -47,7 +47,7 @@ function FormDemo() {
     <DemoCard>
       <Heading>Notifications</Heading>
       <Muted>Weekly summary email</Muted>
-      <span className="my-(--bb-space-1) block rounded-bb-control border border-bb-border bg-bb-background px-(--bb-space-2) py-(--bb-space-1) text-bb-muted">
+      <span className="my-(--bb-space-1) block truncate rounded-bb-control border border-bb-border bg-bb-background px-(--bb-space-2) py-(--bb-space-1) text-bb-muted">
         sam@northwind.example
       </span>
       <SolidButton>Save changes</SolidButton>

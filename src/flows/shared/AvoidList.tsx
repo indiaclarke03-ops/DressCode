@@ -39,7 +39,7 @@ export function AvoidList() {
 
   return (
     <>
-      <ul className="m-0 grid list-none gap-x-10 p-0 lg:grid-cols-2">
+      <ul className="m-0 grid list-none gap-x-10 p-0 @3xl:grid-cols-2">
         {AVOID_ITEMS.map((item) => (
           <AvoidRow
             key={item.id}

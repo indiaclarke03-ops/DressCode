@@ -36,9 +36,26 @@
   --color-bb-muted: var(--bb-color-text-muted);
   --color-bb-accent: var(--bb-color-accent);
   --color-bb-on-accent: var(--bb-color-accent-foreground);
+  --color-bb-success: var(--bb-color-success);
+  --color-bb-warning: var(--bb-color-warning);
+  --color-bb-danger: var(--bb-color-danger);
   --color-bb-emphasis-1: var(--bb-emphasis-1);
   --color-bb-emphasis-2: var(--bb-emphasis-2);
   --color-bb-emphasis-3: var(--bb-emphasis-3);
+  --text-bb-1: var(--bb-text-1);
+  --text-bb-2: var(--bb-text-2);
+  --text-bb-3: var(--bb-text-3);
+  --text-bb-4: var(--bb-text-4);
+  --text-bb-5: var(--bb-text-5);
+  --text-bb-6: var(--bb-text-6);
+  --text-bb-7: var(--bb-text-7);
+  --spacing-bb-1: var(--bb-space-1);
+  --spacing-bb-2: var(--bb-space-2);
+  --spacing-bb-3: var(--bb-space-3);
+  --spacing-bb-4: var(--bb-space-4);
+  --spacing-bb-5: var(--bb-space-5);
+  --spacing-bb-6: var(--bb-space-6);
+  --spacing-bb-control: var(--bb-control-height);
   --radius-bb-card: var(--bb-radius-card);
   --radius-bb-control: var(--bb-radius-control);
   --shadow-bb-card: var(--bb-shadow-card);
@@ -72,7 +89,11 @@
 
   --container-page: 76rem;
   --container-reading: 38rem;
+  --container-flow: 92rem;
 }
+
+/* Inside a preview frame, for the asymmetrical half of This or That round 8. */
+@custom-variant editorial (&:where([data-layout='editorial'], [data-layout='editorial'] *));
 
 @layer base {
   html {

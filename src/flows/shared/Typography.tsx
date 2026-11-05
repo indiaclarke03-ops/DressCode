@@ -70,7 +70,7 @@ export function Typography() {
           label="Font pairing"
           value={config.fontPairingId}
           onValueChange={(fontPairingId) => dispatch({ type: 'set', patch: { fontPairingId } })}
-          className="grid gap-4 md:grid-cols-2"
+          className="grid gap-4 @xl:grid-cols-2"
         >
           {shown.map((pairing) => (
             <ChoiceCard
@@ -91,7 +91,7 @@ export function Typography() {
           onValueChange={(value) =>
             dispatch({ type: 'set', patch: { typeScale: value as DesignConfig['typeScale'] } })
           }
-          className="grid gap-3 md:grid-cols-3"
+          className="grid gap-3 @2xl:grid-cols-3"
         >
           {SCALES.map((scale) => (
             <ChoiceCard
