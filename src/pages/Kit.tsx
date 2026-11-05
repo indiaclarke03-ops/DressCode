@@ -5,6 +5,7 @@ import { CodeBlock } from '@/components/ui/CodeBlock';
 import { Stepper } from '@/components/ui/Stepper';
 import { Tabs } from '@/components/ui/Tabs';
 import { FLOWS, stepPath } from '@/flows/steps';
+import { KitTokens } from './KitTokens';
 
 const SAMPLE_BRIEF = `## Colour tokens
 | Token      | Value   | Use                       |
@@ -33,6 +34,10 @@ export default function Kit() {
   return (
     <div className="mx-auto max-w-page px-4 py-10 md:px-8 md:py-16">
       <h1 className="mt-0 mb-8 font-display text-title font-normal text-ink">UI kit</h1>
+
+      <Section title="Design tokens">
+        <KitTokens />
+      </Section>
 
       <Section title="Buttons">
         <div className="flex flex-wrap gap-3">

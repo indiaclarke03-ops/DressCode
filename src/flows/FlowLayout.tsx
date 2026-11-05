@@ -1,6 +1,8 @@
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { domAnimation, LazyMotion, m, MotionConfig } from 'framer-motion';
+import { useEffect } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
+import { useConfig } from '@/app/ConfigContext';
 import { Button } from '@/components/ui/Button';
 import { Stepper } from '@/components/ui/Stepper';
 import { PagePlaceholder } from '@/pages/PagePlaceholder';
@@ -10,6 +12,12 @@ const STEP_TRANSITION = { duration: 0.2, ease: 'easeOut' } as const;
 
 export default function FlowLayout({ mode }: { mode: FlowMode }) {
   const { stepId } = useParams();
+  const { dispatch } = useConfig();
+
+  useEffect(() => {
+    dispatch({ type: 'setMode', mode });
+  }, [dispatch, mode]);
+
   const { name, steps } = FLOWS[mode];
   const index = steps.findIndex((step) => step.id === stepId);
   const step = steps[index];
