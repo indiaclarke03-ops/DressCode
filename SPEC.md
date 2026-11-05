@@ -364,6 +364,19 @@ When the user pasted current styles, fill the old → new map automatically by n
 ### 9.7 Kickoff prompt (Start fresh mode only)
 A short prompt: *"Read DESIGN.md. We're building a <type>. Before writing features, set up the design tokens, base layout and a small component set (button, card, input, table/chart as relevant). Screenshot and check against the brief, then wait for me."*
 
+### 9.8 Saved styles (brand library)
+A style is often bigger than one project: a brand or company wants the same look across its website, slide decks, graphics and documents. Saved styles let someone keep a style and reuse it before anything they make.
+
+- **Save this style** on the Review step. It uses the "Name your style" field, which becomes required here (e.g. "Acme brand"). Saving again under the same name asks whether to update it or keep both.
+- **My styles** page (`#/styles`), linked in the header. Each saved style shows its name, palette strip, fonts and date saved, with these actions: Copy `DESIGN.md`, Copy prompt, Open and edit, Copy share link, Delete (with confirmation).
+- **"What are you making?" picker** on each saved style: Website / Web app / Slide deck / Graphic or social post / Document or report / Something else (free text). It produces a short prompt to paste before starting that work, for example: *"Before you start, follow this brand style. We're making a slide deck."* followed by the tokens and do-not list, and rules for that medium (a slide deck gets slide-sized type and one accent per slide; a graphic gets its palette and fonts with no web-only instructions).
+- **Plain language:** this is the screen newcomers will reuse most, so labels explain what to do with each output, with no assumed coding knowledge.
+- **Storage:** saved in this browser with `localStorage`, using the existing `parseConfig` to validate on read. No accounts, and nothing is uploaded. The page says so plainly, including that styles don't follow you to another browser.
+- **Moving and sharing:** **Export** a style (or all of them) as a `.json` file and **Import** it elsewhere, so a team can share one brand style. Imported files go through `parseConfig`. Share links keep working too.
+- Handles blocked or full storage: show a clear message and offer Export instead of failing silently.
+
+The prompts come from a pure, tested generator, `generators/stylePrompt.ts`: `(config, tokens, medium) => string`. The "Before you finish" section (§9.1) applies to web outputs; other mediums get an equivalent check suited to them.
+
 ---
 
 ## 10. Mode C: Quick tweaks
@@ -514,7 +527,7 @@ interface TweakDefinition {
 public/ (favicon, og-image.png, 404.html)
 src/
   app/        App.tsx, routes.tsx, ConfigContext.tsx
-  pages/      Landing.tsx, Examples.tsx, Tweaks.tsx
+  pages/      Landing.tsx, Examples.tsx, Tweaks.tsx, Styles.tsx
   flows/
     fresh/    steps for Start fresh
     restyle/  CurrentProject.tsx, KeepList.tsx, ChangeSize.tsx
@@ -526,9 +539,9 @@ src/
   tweaks/     colour.ts, typography.ts, layout.ts, components.ts,
               charts.ts, maps.ts, simulators.ts, motion.ts, polish.ts
   generators/ designMd.ts, skillMd.ts, claudeMdSnippet.ts, tokensCss.ts,
-              tailwind.ts, restyleMd.ts, kickoff.ts, __tests__/
+              tailwind.ts, restyleMd.ts, kickoff.ts, stylePrompt.ts, __tests__/
   components/ui/
-  lib/        urlState.ts, fonts.ts, zip.ts
+  lib/        urlState.ts, fonts.ts, zip.ts, styleLibrary.ts
   styles/     globals.css
 ```
 
@@ -542,7 +555,7 @@ Stop after each phase so I can review it in the browser.
 2. **Config + tokens:** types, reducer, defaults, URL state, `deriveTokens`, palette and contrast helpers, with tests. ✅ Tests pass.
 3. **Start fresh flow:** all steps working, including This-or-That and the project-type questions. ✅ Full run-through possible.
 4. **Live preview:** PreviewFrame and all 8 scenes with realistic content. ✅ Every choice visibly changes the preview; every scene looks like a real product.
-5. **Exports:** all generators plus the Review step (tabs, copy, download, zip, share link). ✅ Generated briefs for 3 configs read like a human designer wrote them.
+5. **Exports:** all generators plus the Review step (tabs, copy, download, zip, share link), and saved styles (§9.8). ✅ Generated briefs for 3 configs read like a human designer wrote them; a saved style survives a refresh and yields a usable prompt for each medium.
 6. **Restyle flow:** style parser, image colour extraction, keep-list, scope, current-vs-new preview toggle, editable old → new colour map, and `RESTYLE.md`. ✅ Pasting a real Tailwind config or CSS file produces a sensible map.
 7. **Quick tweaks:** tweak data files, page layout, inline placeholders, basket, global toggles. ✅ At least 40 tweaks across all categories.
 8. **Polish + ship:** responsive pass (390 / 768 / 1440), accessibility pass, examples gallery, OG image, README. ✅ Acceptance criteria in §17 met.
@@ -564,6 +577,7 @@ Stop after each phase so I can review it in the browser.
 - [ ] Start fresh: landing page to downloaded brief in under 3 minutes.
 - [ ] Restyle: pasting a real CSS/Tailwind file extracts colours and fonts, shows current vs. new, and produces a `RESTYLE.md` with a sensible old → new map.
 - [ ] Quick tweaks: any single tweak can be found and copied in under 20 seconds; the basket combines several tweaks cleanly.
+- [ ] Saved styles: a style can be saved, reopened after closing the browser, exported, imported in another browser, and used to copy a prompt for a website, slide deck, graphic or document.
 - [ ] Every choice visibly changes the live preview.
 - [ ] Share links restore the exact configuration.
 - [ ] Manual test: run a generated `RESTYLE.md` on a real v1 project in Claude Code. The look changes, and functionality doesn't.
